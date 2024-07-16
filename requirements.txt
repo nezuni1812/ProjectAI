@@ -1,1 +1,3 @@
+hupper==1.12.1
 tk
+pyglet

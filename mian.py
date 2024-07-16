@@ -1,6 +1,14 @@
 import hupper
+import pyglet
 from tkinter import *
 from tkinter import ttk
+from ctypes import windll
+
+# Make texts sharper
+windll.shcore.SetProcessDpiAwareness(1)
+
+# Add font file
+pyglet.font.add_file('CascadiaCode.ttf')
 
 BOX_WIDTH = 50
 PAD = 3
@@ -41,10 +49,10 @@ def make_boxes(canv: Canvas):
                 canv.create_rectangle(x0, y0, x1, y1, fill=colors[maze[j][i]], width=1)
             elif (isinstance(maze[j][i], str) and any(c.isalpha() for c in maze[j][i])):
                 canv.create_rectangle(x0, y0, x1, y1, fill=colors[maze[j][i][0]], width=1)
-                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i], font=('Times New Roman', 14))
+                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i], font=('Cascadia Code', 14))
             else:
                 canv.create_rectangle(x0, y0, x1, y1, fill='#dae8fc', width=1)
-                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i], font=('Times New Roman', 14))
+                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i], font=('Cascadia Code', 14))
     canv.pack()
 
 def main():
