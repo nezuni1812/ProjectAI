@@ -18,16 +18,16 @@ colors = {
 
 def make_boxes(canv: Canvas):
     maze = [
-        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
-        [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
+        [0, 0, 0, -1, -1, 0, 0, 0, 0, 0],
+        [0, 'S', 0, 0, 0, 0, 0, -1, 0, -1],
+        [0, 0, -1, -1, -1, 'S1', 0, -1, 0, -1],
         [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-        [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
+        [0, 0, -1, -1, -1, 0, 'G2', -1, -1, 0],
         [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-        [0, 0, 0, 0, -1, 4, -1, 8, -1, 0],
-        [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-        [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
-        [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
+        [0, 0, 'F1', 0, -1, 4, -1, 8, -1, 0],
+        [0, 0, 0, 0, -1, 0, 0, 0, 'G', 0],
+        [0, -1, -1, -1, -1, 'S2', 0, 0, 0, 0],
+        ['G1', 0, 5, 0, 0, 0, -1, -1, -1, 0],
     ]
     # canv.create_rectangle(0, 0, 24, 24, fill='yellow', width=1)
     # canv.create_rectangle(24, 0, 48, 24, fill='red', width=1)
@@ -40,10 +40,11 @@ def make_boxes(canv: Canvas):
             if (maze[j][i] in colors):
                 canv.create_rectangle(x0, y0, x1, y1, fill=colors[maze[j][i]], width=1)
             elif (isinstance(maze[j][i], str) and any(c.isalpha() for c in maze[j][i])):
-                canv.create_rectangle(x0, y0, x1, y1, fill=colors[maze[j][i]][0], width=1)
+                canv.create_rectangle(x0, y0, x1, y1, fill=colors[maze[j][i][0]], width=1)
+                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i], font=('Times New Roman', 14))
             else:
                 canv.create_rectangle(x0, y0, x1, y1, fill='#dae8fc', width=1)
-                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i])
+                canv.create_text(x0 + BOX_WIDTH/2, y0 + BOX_WIDTH/2, text=maze[j][i], font=('Times New Roman', 14))
     canv.pack()
 
 def main():
@@ -63,8 +64,6 @@ def main():
     canvas.pack(fill='both', expand=True)
     
     make_boxes(canvas)
-
-    # panel = PanedWindow(root, orient=VERTICAL)
 
     root.mainloop()
 
