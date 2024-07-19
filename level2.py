@@ -1,5 +1,18 @@
 import heapq
 
+class PriorityQueue:
+    def __init__(self):
+        self.elements = []
+    
+    def empty(self):
+        return len(self.elements) == 0
+    
+    def put(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+    
+    def get(self):
+        return heapq.heappop(self.elements)[1]
+
 def a_star(start, goal, time_limit, maze):
     frontier = PriorityQueue()
     frontier.put(start, 0)
@@ -65,19 +78,6 @@ def manhattan_distance(node, goal):
     x1, y1 = node
     x2, y2 = goal
     return abs(x1 - x2) + abs(y1 - y2)
-
-class PriorityQueue:
-    def __init__(self):
-        self.elements = []
-    
-    def empty(self):
-        return len(self.elements) == 0
-    
-    def put(self, item, priority):
-        heapq.heappush(self.elements, (priority, item))
-    
-    def get(self):
-        return heapq.heappop(self.elements)[1]
 
 # Example usage
 maze = [
