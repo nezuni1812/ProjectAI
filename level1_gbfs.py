@@ -1,8 +1,8 @@
 import heapq
 import time
-import mian
+import Visualizer
 
-visuals = mian.Visualizer()
+visuals = Visualizer.Visualizer()
 
 
 def get_neighbors(current, maze):
@@ -77,7 +77,7 @@ def gbfs(start, goal, maze):
         visuals.make_boxes()
         # visuals.update_frontier(frontier.list())
         visuals.update_current(current)
-        visuals.update_screen()
+        visuals.draw_screen()
         print(current)
         
         time.sleep(0.2)
@@ -132,7 +132,7 @@ def init_function():
         print(f"Total moves: {len(path) - 1}")
         for node in path:
             visuals.update_current(node)
-            visuals.update_screen()
+            visuals.draw_screen()
             time.sleep(.2)
     else:
         print("No path found within the given constraints.")

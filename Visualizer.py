@@ -85,6 +85,16 @@ class Visualizer:
         ]
         
         self.init_func = init_func
+        
+        self.root = Tk()
+        self.root.geometry('520x600')
+        self.root.configure(background='#696969')
+        
+        self.canvas = Canvas()
+        self.canvas.pack(fill='both', expand=True)
+        
+        self.make_boxes()
+        self.canvas.pack()
 
         pass
     
@@ -97,9 +107,9 @@ class Visualizer:
     def start_func(self):
         self.init_func()
     
-    def update_screen(self):
-        self.root.update()
+    def draw_screen(self):
         self.canvas.pack()
+        self.root.update()
     
     def draw(self):
         print('Drawing...')
