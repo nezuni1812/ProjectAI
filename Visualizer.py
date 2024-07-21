@@ -59,33 +59,6 @@ class Visualizer:
             'F': '#fff2cc',
         }
         
-        self.map1 = [
-            [0, 0, 0, -1, -1, 0, 0, 0, 0, 0],
-            [0, 'S', 0, 0, 0, 0, 0, -1, 0, -1],
-            [0, 0, -1, -1, -1, 'S1', 0, -1, 0, -1],
-            [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-            [0, 0, -1, -1, -1, 0, 'G2', -1, -1, 0],
-            [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-            [0, 0, 'F1', 0, -1, 4, -1, 8, -1, 0],
-            [0, 0, 0, 0, -1, 0, 0, 0, 'G', 0],
-            [0, -1, -1, -1, -1, 'S2', 0, 0, 0, 0],
-            ['G1', 0, 5, 0, 0, 0, -1, -1, -1, 0],
-        ]
-        self.map2 = [
-            [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
-            [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
-            [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-            [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
-            [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-            [0, 0, 0, 0, -1, 4, -1, 8, -1, 0],
-            [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-            [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
-            [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
-        ]
-        
-        self.init_func = init_func
-        
         self.root = Tk()
         self.root.geometry('520x600')
         self.root.configure(background='#696969')
@@ -100,43 +73,27 @@ class Visualizer:
     
     def set_map(self, map: list):
         self.maze = map
-        
-    def set_init_func(self, func):
-        self.init_func = func
-        
-    def start_func(self):
-        self.init_func()
     
     def draw_screen(self):
         self.canvas.pack()
         self.root.update()
     
-    def draw(self):
-        print('Drawing...')
-        self.root = Tk()
-        self.root.geometry('520x600')
-        self.root.configure(background='#696969')
-        # self.root.option_add("*Button*Background", "#696969") 
+    # def draw(self):
+    #     print('Drawing...')
+    #     self.root = Tk()
+    #     self.root.geometry('520x600')
+    #     self.root.configure(background='#696969')
 
-
-        # greeting = Label(text="Hello, Tkinter")
-        # greeting.pack()
-        # thing = ttk.Label(text="Hi")
-        # thing.pack()
-
-        self.canvas = Canvas()
-        self.canvas.pack(fill='both', expand=True)
+    #     self.canvas = Canvas()
+    #     self.canvas.pack(fill='both', expand=True)
         
-        self.make_boxes()
-        self.canvas.pack()
-        # ttk.Button(text='Update frontier', command=self.toggle_frontier).pack()
-        # ttk.Button(text='Update current', command=self.toggle_current).pack()
-        ttk.Button(text='Start path finding', command=self.start_func).pack()
+    #     self.make_boxes()
+    #     self.canvas.pack()
+    #     ttk.Button(text='Start path finding', command=self.start_func).pack()
 
-        self.root.mainloop()
+    #     self.root.mainloop()
 
     def update_frontier(self, frontier: list):
-        # self.make_boxes()
         for j, i in frontier:
             x0 = i*self.BOX_WIDTH + self.PAD
             y0 = j*self.BOX_WIDTH + self.PAD
@@ -145,8 +102,6 @@ class Visualizer:
             
             self.canvas.create_rectangle(x0, y0, x1, y1, fill='#e4f6d4', width=1)
             self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=self.maze[j][i], font=('Cascadia Code', 14))
-            
-        # self.canvas.pack()
             
     def update_path(self, path: list):
         self.make_boxes()
@@ -159,7 +114,6 @@ class Visualizer:
             
             self.canvas.create_rectangle(x0, y0, x1, y1, fill='#e4f6d4', width=1)
             self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=self.maze[j][i], font=('Cascadia Code', 14))
-        
             
     def update_current(self, current):
         j, i = current
@@ -187,47 +141,11 @@ class Visualizer:
                 else:
                     self.canvas.create_rectangle(x0, y0, x1, y1, fill='#dae8fc', width=1)
                     self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=self.maze[j][i], font=('Cascadia Code', 14))
-        # self.canvas.pack()
 
-    def toggle_frontier(self):
-        print("Trying to update")
-        front = [(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (5, 7), (6, 7), (7, 7), (7, 8)]
-        
-        if self.toggle == False:
-            self.make_boxes()
-            self.canvas.pack()
-            self.toggle = True
-            return
-        else:
-            self.toggle = False
-        
-        # if (self.maze == self.map1):
-        #     self.maze = self.map2
-        # else:
-        #     self.maze = self.map1
-            
-        self.make_boxes()
-        self.update_frontier(front)
-        self.canvas.pack()
-    
-    def toggle_current(self):
-        print("Trying to update current")
-        
-        if self.toggleCurrent == False:
-            self.make_boxes()
-            self.canvas.pack()
-            self.toggleCurrent = True
-            return
-        else:
-            self.toggleCurrent = False
-            
-        self.make_boxes()
-        self.update_current((1, 2))
-        self.canvas.pack()
     
 def main():
     visuals = Visualizer()
-    visuals.draw()
+    # visuals.draw()
 
 if __name__ == '__main__':
     # start_reloader()

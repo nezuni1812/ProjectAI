@@ -74,10 +74,10 @@ def gbfs(start, goal, maze):
         print('running')
         current = frontier.get()
         
-        visuals.make_boxes()
+        # visuals.make_boxes()
         # visuals.update_frontier(frontier.list())
-        visuals.update_current(current)
-        visuals.draw_screen()
+        # visuals.update_current(current)
+        # visuals.draw_screen()
         print(current)
         
         time.sleep(0.2)
@@ -131,8 +131,8 @@ def init_function():
         print("Path found:", path)
         print(f"Total moves: {len(path) - 1}")
         for node in path:
-            visuals.update_current(node)
-            visuals.draw_screen()
+            # visuals.update_current(node)
+            # visuals.draw_screen()
             time.sleep(.2)
     else:
         print("No path found within the given constraints.")
