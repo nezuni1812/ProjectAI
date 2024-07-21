@@ -1,4 +1,9 @@
 import heapq
+import time
+import mian
+
+visuals = mian.Visualizer()
+
 
 def get_neighbors(current, maze):
     neighbors = []
@@ -21,7 +26,7 @@ def manhattan_distance(node, goal):
 class PriorityQueue:
     def __init__(self):
         self.elements = []
-    
+        
     def empty(self):
         return len(self.elements) == 0
     
@@ -30,6 +35,9 @@ class PriorityQueue:
     
     def get(self):
         return heapq.heappop(self.elements)[1]
+    
+    def list(self):
+        return self.elements
 
 def bfs(start, goal, maze):
     if start == goal:
@@ -58,8 +66,23 @@ def gbfs(start, goal, maze):
     came_from[start] = None
     reached = set([start])
     
+    # visuals.draw()
+    
+    print('lmao')
+    
     while not frontier.empty():
+        print('running')
         current = frontier.get()
+        
+        visuals.make_boxes()
+        # visuals.update_frontier(frontier.list())
+        visuals.update_current(current)
+        visuals.update_screen()
+        print(current)
+        
+        time.sleep(0.2)
+        
+        # return None
         
         if current == goal:
             return reconstruct_path(came_from, start, goal)
@@ -100,9 +123,21 @@ maze = [
 start = (1, 1)  # Starting point 'S'
 goal = (7, 8)  # Goal point 'G'
 
-path = gbfs(start, goal, maze)
-if path:
-    print("Path found:", path)
-    print(f"Total moves: {len(path) - 1}")
-else:
-    print("No path found within the given constraints.")
+visuals.set_map(maze)
+
+def init_function():
+    path = gbfs(start, goal, maze)
+    if path:
+        print("Path found:", path)
+        print(f"Total moves: {len(path) - 1}")
+        for node in path:
+            visuals.update_current(node)
+            visuals.update_screen()
+            time.sleep(.2)
+    else:
+        print("No path found within the given constraints.")
+        
+visuals.set_init_func(init_function)
+print('before draw call')
+visuals.draw()
+print('after draw call')
