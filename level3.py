@@ -1,4 +1,5 @@
 import heapq
+import ReadInput
 
 class PriorityQueue:
     def __init__(self):
@@ -107,25 +108,11 @@ def refuel_time(node, maze):
     x, y = node
     return abs(maze[x][y]) - 1 #F(a) = abs(a) - 1
 
-# Example usage
-maze = [
-    [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
-    [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
-    [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-    [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
-    [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-    [0, 0, -2, 0, -1, 4, -1, 8, -1, 0],  # -2 represents a gas station F1
-    [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-    [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
-    [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
-]
-# -2 represents for F1, -3 represents for F2, F(a) = abs(a) - 1
+file_path = 'input1_level3.txt'
+n, m, time_limit, fuel_capacity, maze, positions = ReadInput.read_input_file(file_path)
 
-start = (1, 1)  # Starting point 'S'
-goal = (7, 8)  # Goal point 'G'
-time_limit = 20  # Delivery time limit
-fuel_capacity = 10  # Maximum fuel capacity
+start = positions['S']  # Starting point 'S'
+goal = positions['G']  # Goal point 'G'
 
 path = a_star_fuel(start, goal, time_limit, fuel_capacity, maze)
 if path:
