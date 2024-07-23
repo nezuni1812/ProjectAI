@@ -6,7 +6,7 @@ classDiagram
         +put(item, priority)
         +get()
         +list()
-    }
+    } 
 
     class PathFinder {
         <<Abstract>>
