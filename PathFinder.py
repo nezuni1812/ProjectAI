@@ -27,6 +27,16 @@ class PathFinder(ABC):
         self.visualizer = visualizer
         self.visualizer.set_map(maze)
 
+    class Node:
+        def __init__(self, position, g_cost, h_cost, parent=None):
+            self.position = position
+            self.g_cost = g_cost
+            self.h_cost = h_cost
+            self.f_cost = self.g_cost + self.h_cost
+            self.parent = parent
+        def __lt__(self, other):
+            return self.f_cost < other.f_cost
+
     @staticmethod
     def heuristic(node: Tuple[int, int], goal: Tuple[int, int]) -> int:
         return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
@@ -81,10 +91,27 @@ class PathFinder(ABC):
         self.visualizer.draw_screen()
         time.sleep(0.1)
 
+    # Functions for level 2
+    @staticmethod
+    def cost_to_move(current, next, maze):
+        base_cost = 1 # 1 min to move to adjacent cell
+        if PathFinderLevel2.is_toll_booth(next, maze):
+            base_cost += PathFinderLevel2.toll_booth_wait_time(next, maze)
+        return base_cost
+    @staticmethod
+    def is_toll_booth(node, maze):
+        x, y = node
+        return maze[x][y] > 1
+    @staticmethod
+    def toll_booth_wait_time(node, maze):
+        x, y = node
+        return maze[x][y]
+
     @abstractmethod
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         pass
 
+# Level 1
 
 class BFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
@@ -95,11 +122,11 @@ class BFSPathFinder(PathFinder):
         reached = set([start])
 
         while frontier:
-            current_node, path = frontier.pop(0)
-            print('Checking:', current_node)
-            self.visualize_step(current_node)
+            current, path = frontier.pop(0)
+            print('Checking:', current)
+            self.visualize_step(current)
 
-            for next_node in self.get_neighbors(current_node, self.maze):
+            for next_node in self.get_neighbors(current, self.maze):
                 if next_node == goal:
                     return path + [next_node]
                 if next_node not in reached:
@@ -112,11 +139,11 @@ class DFSPathFinder(PathFinder):
             return [start]
         stack = [(start, [start])]
         while stack:
-            current_node, path = stack.pop()
-            print('Checking: ', current_node)
-            self.visualize_step(current_node)
+            current, path = stack.pop()
+            print('Checking: ', current)
+            self.visualize_step(current)
 
-            for next in self.get_neighbors(current_node, self.maze):
+            for next in self.get_neighbors(current, self.maze):
                 if next not in path:
                     if next == goal:
                         return path + [next]
@@ -163,6 +190,7 @@ class GBFSPathFinder(PathFinder):
         
         while not frontier.empty():
             current = frontier.get()
+            print('Checking: ', current)
             self.visualize_step(current)
             
             if current == goal:
@@ -172,6 +200,60 @@ class GBFSPathFinder(PathFinder):
                 if child not in reached:
                     reached.add(child)
                     came_from[child] = current
-                    frontier.put(child, self.heuristic(child, goal))
-                    
+                    frontier.put(child, self.heuristic(child, goal)) 
+        return None
+class AStarPathFinder(PathFinder):
+    def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
+        start_node = self.Node(start, 0, self.heuristic(start, goal))
+        frontier = PriorityQueue()
+        frontier.put(start_node, start_node.f_cost)
+        came_from = {start: None}
+        reached = {start: 0}
+        while not frontier.empty():
+            current = frontier.get()
+            print('Checking: ', current.position)
+            self.visualize_step(current.position)
+
+            if current.position == goal:
+                return self.reconstruct_path(came_from, start, goal)
+
+            for neighbor in self.get_neighbors(current.position, self.maze):
+                new_cost = reached[current.position] + 1
+
+                if neighbor not in reached or new_cost < reached[neighbor]:
+                    reached[neighbor] = new_cost
+                    priority = new_cost + self.heuristic(neighbor, goal)
+                    neighbor_node = self.Node(neighbor, new_cost, self.heuristic(neighbor, goal), current)
+                    frontier.put(neighbor_node, priority)
+                    came_from[neighbor] = current.position
+        return None
+
+
+# Implement A* algorithm for level 2    
+class PathFinderLevel2(PathFinder):
+    def find_path(self, start: Tuple[int], goal: Tuple[int]) -> Optional[List[Tuple[int]]]:
+        start_node = self.Node(start, 0, self.heuristic(start, goal))
+        frontier = PriorityQueue()
+        frontier.put(start_node, start_node.f_cost)
+        came_from = {start: None}
+        reached = {start: 0}
+        
+        while not frontier.empty():
+            current = frontier.get()
+            print('Checking: ', current.position)
+            self.visualize_step(current.position)
+
+            if current.position == goal:  # Compare current.position with goal
+                return self.reconstruct_path(came_from, start, goal)
+
+            for neighbor in self.get_neighbors(current.position, self.maze):
+                new_cost = reached[current.position] + self.cost_to_move(current.position, neighbor, self.maze)
+
+                if neighbor not in reached or new_cost < reached[neighbor]:
+                    reached[neighbor] = new_cost
+                    priority = new_cost + self.heuristic(neighbor, goal)
+                    neighbor_node = self.Node(neighbor, new_cost, self.heuristic(neighbor, goal), current)
+                    frontier.put(neighbor_node, priority)
+                    came_from[neighbor] = current.position
+
         return None

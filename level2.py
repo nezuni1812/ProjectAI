@@ -86,5 +86,6 @@ n, m, time_limit, fuel_capacity, maze, positions = ReadInput.read_input_file(fil
 start = positions['S']  # Starting point 'S'
 goal = positions['G']  # Goal point 'G'
 
+
 path = a_star(start, goal, time_limit, maze)
 print("Path found:", path)
