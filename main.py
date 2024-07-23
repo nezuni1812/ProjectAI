@@ -21,14 +21,24 @@ def main():
     goal = (7, 8)
 
 
-    bfs_finder = PathFinder.BFSPathFinder(maze_grid, visualizer)
+    bfs_finder  = PathFinder.BFSPathFinder(maze_grid, visualizer)
+    dfs_finder  = PathFinder.DFSPathFinder(maze_grid, visualizer)
+    ucs_finder  = PathFinder.UCSPathFinder(maze_grid, visualizer)
     gbfs_finder = PathFinder.GBFSPathFinder(maze_grid, visualizer)
+  
 
     print("Running BFS...")
     bfs_finder.start_visualizer(start, goal)
 
+    print("\nRunning DFS...")
+    dfs_finder.start_visualizer(start, goal)
+
+    print("\nRunning UCS...")
+    ucs_finder.start_visualizer(start, goal)
+
     print("\nRunning GBFS...")
     gbfs_finder.start_visualizer(start, goal)
+
 
 if __name__ == "__main__":
     main()

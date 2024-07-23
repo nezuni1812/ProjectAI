@@ -106,6 +106,50 @@ class BFSPathFinder(PathFinder):
                     reached.add(next_node)
                     frontier.append((next_node, path + [next_node]))
         return None
+class DFSPathFinder(PathFinder):
+    def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
+        if start == goal:
+            return [start]
+        stack = [(start, [start])]
+        while stack:
+            current_node, path = stack.pop()
+            print('Checking: ', current_node)
+            self.visualize_step(current_node)
+
+            for next in self.get_neighbors(current_node, self.maze):
+                if next not in path:
+                    if next == goal:
+                        return path + [next]
+                    stack.append((next, path + [next]))
+        return None
+class UCSPathFinder(PathFinder):
+    def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
+        visited = set()
+        frontier = PriorityQueue()
+        frontier.put(start, 0)
+        came_from = {start: None}
+        cost_so_far = {start: 0}
+
+        while not frontier.empty():
+            current = frontier.get()
+            print('Checking: ', current)
+            self.visualize_step(current)
+
+            if current == goal:
+                return self.reconstruct_path(came_from, start, goal)
+
+            visited.add(current)
+
+            for neighbor in self.get_neighbors(current, self.maze):
+                new_cost = cost_so_far[current] + 1  # Assuming each step costs 1
+                if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                    cost_so_far[neighbor] = new_cost
+                    priority = new_cost
+                    frontier.put(neighbor, priority)
+                    came_from[neighbor] = current
+
+        return None
+    
 
 class GBFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
