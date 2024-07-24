@@ -29,7 +29,7 @@ def a_star(start, goal, time_limit, maze):
             new_cost = path_cost + cost_to_move()
             new_time = current_time + cost_to_move() + wait_time(next, maze)
             
-            if new_time <= time_limit:
+            if new_time <= time_limit and (next not in path or new_cost < path_cost):
                 priority = new_cost + heuristic(next, goal)
                 frontier.put(priority, (new_cost, next, path, new_time))
     
@@ -60,7 +60,7 @@ def manhattan_distance(node, goal):
     x2, y2 = goal
     return abs(x1 - x2) + abs(y1 - y2)
 
-file_path = 'input1_level2.txt'
+file_path = 'input3_level2.txt'
 n, m, time_limit, fuel_capacity, maze, positions = ReadInput.read_input_file(file_path)
 
 start = positions['S']  # Starting point 'S'
@@ -69,8 +69,8 @@ goal = positions['G']  # Goal point 'G'
 path = a_star(start, goal, time_limit, maze)
 if path:
     print("Path found:", path)
-    total_cost = sum(cost_to_move(path[i], path[i+1], maze) for i in range(len(path)-1))
-    total_time = sum(cost_to_move(path[i], path[i+1], maze) + wait_time(path[i+1], maze) for i in range(len(path)-1))
+    total_cost = sum(cost_to_move() for i in range(len(path)-1))
+    total_time = sum(cost_to_move() + wait_time(path[i+1], maze) for i in range(len(path)-1))
     print(f"Total time: {total_time} minutes")
     print(f"Total cost: {total_cost}")
 else:
