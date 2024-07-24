@@ -66,7 +66,7 @@ def cost_to_move(current, next, maze):
 
 def wait_time(node, maze):
     x, y = node
-    return maze[x][y]
+    return maze[x][y] + 1
 
 def heuristic(node, goal):
     return manhattan_distance(node, goal)
