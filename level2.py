@@ -8,7 +8,7 @@ class PriorityQueue:
     def empty(self):
         return len(self.elements) == 0
     
-    def put(self, item, priority):
+    def put(self, priority, item):
         heapq.heappush(self.elements, (priority, item))
     
     def get(self):
@@ -16,25 +16,22 @@ class PriorityQueue:
 
 def a_star(start, goal, time_limit, maze):
     frontier = PriorityQueue()
-    frontier.put(start, 0)
-    came_from = {}
-    cost_so_far = {}
-    came_from[start] = None
-    cost_so_far[start] = 0
+    frontier.put(0, (0, start, [], 0))  # (priority, (path cost, current position, path, current_time))
     
     while not frontier.empty():
-        current = frontier.get()
+        path_cost, current, path, current_time = frontier.get()
+        path = path + [current]
         
-        if current == goal and cost_so_far[current] <= time_limit:
-            return reconstruct_path(came_from, start, goal)
+        if current == goal and current_time <= time_limit:
+            return path  
         
         for next in get_neighbors(current, maze):
-            new_cost = cost_so_far[current] + cost_to_move(current, next, maze)
-            if new_cost <= time_limit and (next not in cost_so_far or new_cost < cost_so_far[next]):
-                cost_so_far[next] = new_cost
+            new_cost = path_cost + cost_to_move(current, next, maze) 
+            new_time = current_time + cost_to_move(current, next, maze) + wait_time(next, maze)
+            
+            if new_time <= time_limit:
                 priority = new_cost + heuristic(next, goal)
-                frontier.put(next, priority)
-                came_from[next] = current
+                frontier.put(priority, (new_cost, next, path, new_time))
     
     return None  # No path found within time limit
 
@@ -60,15 +57,9 @@ def get_neighbors(current, maze):
 
 def cost_to_move(current, next, maze):
     base_cost = 1  # 1 minute to move to adjacent cell
-    # if is_toll_booth(next, maze):
-    #     base_cost += toll_booth_wait_time(next, maze)
     return base_cost
 
-def is_toll_booth(node, maze):
-    x, y = node
-    return maze[x][y] > 1
-
-def toll_booth_wait_time(node, maze):
+def wait_time(node, maze):
     x, y = node
     return maze[x][y]
 
@@ -86,6 +77,12 @@ n, m, time_limit, fuel_capacity, maze, positions = ReadInput.read_input_file(fil
 start = positions['S']  # Starting point 'S'
 goal = positions['G']  # Goal point 'G'
 
-
 path = a_star(start, goal, time_limit, maze)
-print("Path found:", path)
+if path:
+    print("Path found:", path)
+    total_cost = sum(cost_to_move(path[i], path[i+1], maze) for i in range(len(path)-1))
+    total_time = sum(cost_to_move(path[i], path[i+1], maze) + wait_time(path[i+1], maze) for i in range(len(path)-1))
+    print(f"Total time: {total_time} minutes")
+    print(f"Total cost: {total_cost}")
+else:
+    print("No path found within the given constraints.")
