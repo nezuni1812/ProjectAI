@@ -133,6 +133,7 @@ class BFSPathFinder(PathFinder):
                     reached.add(next_node)
                     frontier.append((next_node, path + [next_node]))
         return None
+    
 class DFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
         if start == goal:
@@ -149,6 +150,7 @@ class DFSPathFinder(PathFinder):
                         return path + [next]
                     stack.append((next, path + [next]))
         return None
+    
 class UCSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         visited = set()
