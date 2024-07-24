@@ -127,13 +127,24 @@ class Visualizer:
         # self.root.mainloop()
         
         for step in path:
+            # Position for current node
             j, i = step[2]
             x0 = i*self.BOX_WIDTH + self.PAD
             y0 = j*self.BOX_WIDTH + self.PAD
             x1 = (i + 1)*self.BOX_WIDTH + self.PAD
             y1 = (j + 1)*self.BOX_WIDTH + self.PAD
             
+            # Position for placing previouse outline
+            before_j, before_i = step[2]
+            before_x0 = before_i*self.BOX_WIDTH + self.PAD
+            before_y0 = before_j*self.BOX_WIDTH + self.PAD
+            before_x1 = (before_i + 1)*self.BOX_WIDTH + self.PAD
+            before_y1 = (before_j + 1)*self.BOX_WIDTH + self.PAD
+            
             self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.8)
+            # outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline='white')
+            outline = self.canvas.create_rectangle(x0, y0, x1, y1, outline='white', width=2)
+            # self.canvas.move(outline, )
             self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0], font=('Cascadia Code', 14))
             
             self.canvas.itemconfigure(txt, text = f"Turn: {step[0]} - {step[3]}\n\
@@ -144,11 +155,13 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 
             if self.autoplay:
                 self.root.after(200)
+                self.canvas.delete(outline)
                 continue
             
             while not self.move:
                 self.root.update()
             # time.sleep(0.4)
+            self.canvas.delete(outline)
         
             
         
