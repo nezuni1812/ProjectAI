@@ -26,24 +26,14 @@ def a_star(start, goal, time_limit, maze):
             return path  
         
         for next in get_neighbors(current, maze):
-            new_cost = path_cost + cost_to_move(current, next, maze) 
-            new_time = current_time + cost_to_move(current, next, maze) + wait_time(next, maze)
+            new_cost = path_cost + cost_to_move()
+            new_time = current_time + cost_to_move() + wait_time(next, maze)
             
             if new_time <= time_limit:
                 priority = new_cost + heuristic(next, goal)
                 frontier.put(priority, (new_cost, next, path, new_time))
     
     return None  # No path found within time limit
-
-def reconstruct_path(came_from, start, goal):
-    path = []
-    current = goal
-    while current != start:
-        path.append(current)
-        current = came_from[current]
-    path.append(start)
-    path.reverse()
-    return path
 
 def get_neighbors(current, maze):
     neighbors = []
@@ -55,9 +45,8 @@ def get_neighbors(current, maze):
             neighbors.append((nx, ny))
     return neighbors
 
-def cost_to_move(current, next, maze):
-    base_cost = 1  # 1 minute to move to adjacent cell
-    return base_cost
+def cost_to_move():
+    return 1
 
 def wait_time(node, maze):
     x, y = node
