@@ -135,15 +135,25 @@ class Visualizer:
             y1 = (j + 1)*self.BOX_WIDTH + self.PAD
             
             # Position for placing previouse outline
-            before_j, before_i = step[2]
+            before_j, before_i = step[1]
             before_x0 = before_i*self.BOX_WIDTH + self.PAD
             before_y0 = before_j*self.BOX_WIDTH + self.PAD
             before_x1 = (before_i + 1)*self.BOX_WIDTH + self.PAD
             before_y1 = (before_j + 1)*self.BOX_WIDTH + self.PAD
             
             self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.8)
-            # outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline='white')
-            outline = self.canvas.create_rectangle(x0, y0, x1, y1, outline='white', width=2)
+            outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline=colrs[step[0]], width=3)
+            # outline = self.canvas.create_rectangle(x0, y0, x1, y1, outline='white', width=2)
+            print(x0, y0, x1, y1)
+            print(before_x0, before_y0, before_x1, before_y1)
+            print(self.canvas.coords(outline))
+            while (self.canvas.coords(outline)[0] != x0 or self.canvas.coords(outline)[1] != y0):
+                x_amount = 1 if x0 > self.canvas.coords(outline)[0] else -1 if x0 < self.canvas.coords(outline)[0] else 0
+                y_amount = 1 if y0 > self.canvas.coords(outline)[1] else -1 if y0 < self.canvas.coords(outline)[1] else 0
+                self.canvas.move(outline, x_amount, y_amount)
+                self.canvas.after(1)
+                self.root.update()
+                
             # self.canvas.move(outline, )
             self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0], font=('Cascadia Code', 14))
             
