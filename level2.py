@@ -60,8 +60,8 @@ def get_neighbors(current, maze):
 
 def cost_to_move(current, next, maze):
     base_cost = 1  # 1 minute to move to adjacent cell
-    if is_toll_booth(next, maze):
-        base_cost += toll_booth_wait_time(next, maze)
+    # if is_toll_booth(next, maze):
+    #     base_cost += toll_booth_wait_time(next, maze)
     return base_cost
 
 def is_toll_booth(node, maze):
