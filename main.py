@@ -9,7 +9,7 @@ def main():
     start = positions['S']  # Starting point 'S'
     goal = positions['G']  # Goal point 'G'
     
-    visualizer = Visualizer.Visualizer(maze_grid)
+    visualizer = Visualizer.Visualizer()
 
     # Level 1 Test 
     bfs_finder  = PathFinder.BFSPathFinder(maze_grid, visualizer)

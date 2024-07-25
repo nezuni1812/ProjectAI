@@ -53,7 +53,7 @@ class Visualizer:
         }
         
         self.root = Tk()
-        self.root.geometry('890x600')
+        self.root.geometry('520x600')
         self.root.configure(background='#696969')
         
         self.canvas = Canvas()
@@ -69,8 +69,10 @@ class Visualizer:
         self.maze = map
     
     def draw_screen(self):
-        self.root.update()
+        # start = time.time()
         self.canvas.pack()
+        self.root.update()
+        # print('Draw:', time.time() - start)
         
     def create_transparent_rectangle(self, x1, y1, x2, y2, **kwargs):
         if 'alpha' in kwargs:

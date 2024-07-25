@@ -87,13 +87,13 @@ class PathFinder(ABC):
         else:
             print("No path found.")
         
-        self.visualizer.canvas.mainloop()
 
     def visualize_step(self, current: Tuple[int, int]):
+        self.visualizer.canvas.delete('all')
         self.visualizer.make_boxes()
         self.visualizer.update_current(current)
         self.visualizer.draw_screen()
-        time.sleep(0.1)
+        self.visualizer.root.after(10)
 
     # Functions for level 2
     @staticmethod
@@ -129,7 +129,7 @@ class BFSPathFinder(PathFinder):
         while frontier:
             current, path = frontier.pop(0)
             print('Checking:', current)
-            # self.visualize_step(current)
+            self.visualize_step(current)
 
             for next_node in self.get_neighbors(current, self.maze):
                 if next_node == goal:
@@ -147,7 +147,7 @@ class DFSPathFinder(PathFinder):
         while stack:
             current, path = stack.pop()
             print('Checking: ', current)
-            # self.visualize_step(current)
+            self.visualize_step(current)
 
             for next in self.get_neighbors(current, self.maze):
                 if next not in path:
@@ -167,7 +167,7 @@ class UCSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             print('Checking: ', current)
-            # self.visualize_step(current)
+            self.visualize_step(current)
 
             if current == goal:
                 return self.reconstruct_path(came_from, start, goal)
@@ -198,7 +198,7 @@ class GBFSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             print('Checking: ', current)
-            # self.visualize_step(current)
+            self.visualize_step(current)
             
             if current == goal:
                 return self.reconstruct_path(came_from, start, goal)
@@ -209,6 +209,7 @@ class GBFSPathFinder(PathFinder):
                     came_from[child] = current
                     frontier.put(child, self.heuristic(child, goal)) 
         return None
+        
 class AStarPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
         frontier = PriorityQueue()
@@ -217,7 +218,7 @@ class AStarPathFinder(PathFinder):
         while not frontier.empty():
             path_cost, current, path = frontier.get()
             path = path + [current]
-            # self.visualize_step(current)
+            self.visualize_step(current)
             
             if current == goal:
                 return path  
