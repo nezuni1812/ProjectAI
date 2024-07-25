@@ -26,6 +26,10 @@ class PathFinder(ABC):
         self.maze = maze
         self.visualizer = visualizer
         self.visualizer.set_map(maze)
+        self.time_limit = 0
+
+    def set_time_limit(self, time_limit):
+        self.time_limit = time_limit
 
     class Node:
         def __init__(self, position, g_cost, h_cost, parent=None):
@@ -93,10 +97,11 @@ class PathFinder(ABC):
 
     # Functions for level 2
     @staticmethod
-    def cost_to_move(current, next, maze):
+    # def cost_to_move(current, next, maze):
+    def cost_to_move():
         base_cost = 1 # 1 min to move to adjacent cell
-        if PathFinderLevel2.is_toll_booth(next, maze):
-            base_cost += PathFinderLevel2.toll_booth_wait_time(next, maze)
+        # if PathFinderLevel2.is_toll_booth(next, maze):
+        #     base_cost += PathFinderLevel2.toll_booth_wait_time(next, maze)
         return base_cost
     @staticmethod
     def is_toll_booth(node, maze):
@@ -233,29 +238,27 @@ class AStarPathFinder(PathFinder):
 
 # Implement A* algorithm for level 2    
 class PathFinderLevel2(PathFinder):
+    def wait_time(self, node, maze):
+        x, y = node
+        return maze[x][y]
+
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> Optional[List[Tuple[int]]]:
-        start_node = self.Node(start, 0, self.heuristic(start, goal))
         frontier = PriorityQueue()
-        frontier.put(start_node, start_node.f_cost)
-        came_from = {start: None}
-        reached = {start: 0}
+        frontier.put((0, start, [], 0), 0)  # (priority, (path cost, current position, path, current_time))
         
         while not frontier.empty():
-            current = frontier.get()
-            print('Checking: ', current.position)
-            self.visualize_step(current.position)
-
-            if current.position == goal:  # Compare current.position with goal
-                return self.reconstruct_path(came_from, start, goal)
-
-            for neighbor in self.get_neighbors(current.position, self.maze):
-                new_cost = reached[current.position] + self.cost_to_move(current.position, neighbor, self.maze)
-
-                if neighbor not in reached or new_cost < reached[neighbor]:
-                    reached[neighbor] = new_cost
-                    priority = new_cost + self.heuristic(neighbor, goal)
-                    neighbor_node = self.Node(neighbor, new_cost, self.heuristic(neighbor, goal), current)
-                    frontier.put(neighbor_node, priority)
-                    came_from[neighbor] = current.position
-
-        return None
+            path_cost, current, path, current_time = frontier.get()
+            path = path + [current]
+            
+            if current == goal and current_time <= self.time_limit:
+                return path  
+            
+            for next in self.get_neighbors(current, self.maze):
+                new_cost = path_cost + self.cost_to_move()
+                new_time = current_time + self.cost_to_move() + self.wait_time(next, self.maze)
+                
+                if new_time <= self.time_limit and (next not in path or new_cost < path_cost):
+                    priority = new_cost + self.heuristic(next, goal)
+                    frontier.put((new_cost, next, path, new_time), priority)
+        
+        return None  # No path found within time limit
