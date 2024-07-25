@@ -34,9 +34,9 @@ def main():
     # a_star_finder.start_visualizer(start, goal)
 
     # Level 2 Test
-    level2_finder = PathFinder.PathFinderLevel2(maze_grid, visualizer)
-    print("\nRunning A*_Level 2...")
-    level2_finder.start_visualizer(start, goal)
+    # level2_finder = PathFinder.PathFinderLevel2(maze_grid, visualizer)
+    # print("\nRunning A*_Level 2...")
+    # level2_finder.start_visualizer(start, goal)
 
 if __name__ == "__main__":
     main()
