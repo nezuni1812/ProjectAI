@@ -129,7 +129,7 @@ class BFSPathFinder(PathFinder):
         while frontier:
             current, path = frontier.pop(0)
             print('Checking:', current)
-            self.visualize_step(current)
+            # self.visualize_step(current)
 
             for next_node in self.get_neighbors(current, self.maze):
                 if next_node == goal:
@@ -147,7 +147,7 @@ class DFSPathFinder(PathFinder):
         while stack:
             current, path = stack.pop()
             print('Checking: ', current)
-            self.visualize_step(current)
+            # self.visualize_step(current)
 
             for next in self.get_neighbors(current, self.maze):
                 if next not in path:
@@ -167,7 +167,7 @@ class UCSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             print('Checking: ', current)
-            self.visualize_step(current)
+            # self.visualize_step(current)
 
             if current == goal:
                 return self.reconstruct_path(came_from, start, goal)
@@ -198,7 +198,7 @@ class GBFSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             print('Checking: ', current)
-            self.visualize_step(current)
+            # self.visualize_step(current)
             
             if current == goal:
                 return self.reconstruct_path(came_from, start, goal)
@@ -217,7 +217,7 @@ class AStarPathFinder(PathFinder):
         while not frontier.empty():
             path_cost, current, path = frontier.get()
             path = path + [current]
-            self.visualize_step(current)
+            # self.visualize_step(current)
             
             if current == goal:
                 return path  

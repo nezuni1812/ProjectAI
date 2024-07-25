@@ -9,16 +9,17 @@ def main():
     start = positions['S']  # Starting point 'S'
     goal = positions['G']  # Goal point 'G'
     
-    visualizer = Visualizer.Visualizer()
+    visualizer = Visualizer.Visualizer(maze_grid)
 
     # Level 1 Test 
-    # bfs_finder  = PathFinder.BFSPathFinder(maze_grid, visualizer)
-    # dfs_finder  = PathFinder.DFSPathFinder(maze_grid, visualizer)
-    # ucs_finder  = PathFinder.UCSPathFinder(maze_grid, visualizer)
-    # gbfs_finder = PathFinder.GBFSPathFinder(maze_grid, visualizer)
+    bfs_finder  = PathFinder.BFSPathFinder(maze_grid, visualizer)
+    dfs_finder  = PathFinder.DFSPathFinder(maze_grid, visualizer)
+    ucs_finder  = PathFinder.UCSPathFinder(maze_grid, visualizer)
+    gbfs_finder = PathFinder.GBFSPathFinder(maze_grid, visualizer)
     a_star_finder = PathFinder.AStarPathFinder(maze_grid, visualizer)
 
     # print("Running BFS...")
+    # bfs_finder.visualizer.set_map(maze_grid)
     # bfs_finder.start_visualizer(start, goal)
 
     # print("\nRunning DFS...")
