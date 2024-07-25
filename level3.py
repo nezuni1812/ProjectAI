@@ -33,7 +33,7 @@ def a_star_fuel(start, goal, time_limit, fuel_capacity, maze):
             elif action == "refuel":
                 new_fuel = fuel_capacity
 
-            if new_time <= time_limit and new_fuel >= 0 and (next not in path or new_cost < path_cost):
+            if new_time <= time_limit and (next not in path or new_cost < path_cost or new_fuel >= 0):
                 priority = new_cost + heuristic(next, goal)
                 frontier.put(priority, (new_cost, next, path, new_time, new_fuel))
     
