@@ -87,7 +87,7 @@ class PathFinder(ABC):
         else:
             print("No path found.")
         
-        pass
+        self.visualizer.canvas.mainloop()
 
     def visualize_step(self, current: Tuple[int, int]):
         self.visualizer.make_boxes()
