@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     # Find the path using WHCA*
     path = level4.whca_star(agents, maze, fuel_capacity)
-
+    path = level4.get_agent_stop(path, agents, maze)
     visuals =  Visualizer.Visualizer()
     
     visuals.set_map(maze)
