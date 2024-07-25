@@ -14,7 +14,7 @@ class PriorityQueue:
     def get(self):
         return heapq.heappop(self.elements)[1]
 
-def a_star(start, goal, time_limit, maze):
+def a_star(start, goal, maze):
     frontier = PriorityQueue()
     frontier.put(0, (0, start, []))  # (priority, (path cost, current position, path))
     
