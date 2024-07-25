@@ -214,6 +214,8 @@ class AStarPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
         frontier = PriorityQueue()
         frontier.put((0, start, []), 0)  # (priority, (path cost, current position, path))
+        reached = {}
+        reached[start] = 0
         
         while not frontier.empty():
             path_cost, current, path = frontier.get()
@@ -225,12 +227,12 @@ class AStarPathFinder(PathFinder):
             
             for next in self.get_neighbors(current, self.maze):
                 new_cost = path_cost + self.cost_to_move()
-                if next not in path or new_cost < path_cost:
+                if next not in reached or new_cost < reached[next]:
+                    reached[next] = new_cost
                     priority = new_cost + self.heuristic(next, goal)
                     frontier.put((new_cost, next, path), priority)
         
         return None  
-
 
 # Implement A* algorithm for level 2    
 class PathFinderLevel2(PathFinder):
@@ -241,6 +243,9 @@ class PathFinderLevel2(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> Optional[List[Tuple[int]]]:
         frontier = PriorityQueue()
         frontier.put((0, start, [], 0), 0)  # (priority, (path cost, current position, path, current_time))
+        
+        reached = {}  # Dictionary to store the states with start position, time
+        reached[(start, 0)] = 0  # The value of the key is the path cost of that state
         
         while not frontier.empty():
             path_cost, current, path, current_time = frontier.get()
@@ -253,7 +258,9 @@ class PathFinderLevel2(PathFinder):
                 new_cost = path_cost + self.cost_to_move()
                 new_time = current_time + self.cost_to_move() + self.wait_time(next, self.maze)
                 
-                if new_time <= self.time_limit and (next not in path or new_cost < path_cost):
+                state = (next, new_time)
+                if new_time <= self.time_limit and (state not in reached or new_cost < reached[state]):
+                    reached[state] = new_cost
                     priority = new_cost + self.heuristic(next, goal)
                     frontier.put((new_cost, next, path, new_time), priority)
         

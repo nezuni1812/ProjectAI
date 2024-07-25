@@ -13,30 +13,36 @@ class PriorityQueue:
     
     def get(self):
         return heapq.heappop(self.elements)[1]
-
+    
 def a_star_fuel(start, goal, time_limit, fuel_capacity, maze):
     frontier = PriorityQueue()
-    frontier.put(0, (0, start, [], 0, fuel_capacity))  # (priority, (path_cost, current position, path, current_fuel, current_time))
+    frontier.put(0 + heuristic(start, goal), (0, start, [], 0, fuel_capacity))
     
+    reached = {}  # Dictionary to store the states with path cost, time, and fuel
+    reached[(start, 0, fuel_capacity)] = 0  # Store the initial state
+
     while not frontier.empty():
         path_cost, current, path, current_time, current_fuel = frontier.get()
         path = path + [current]
-        
-        if current == goal and current_time <= time_limit and current_fuel >= 0:
-            return path  
-        
-        for next, new_fuel, action in get_neighbors_with_fuel(current, current_fuel, fuel_capacity, maze):
+
+        if current == goal and current_time <= time_limit:
+            return path
+
+        for next_state, new_fuel, action in get_neighbors_with_fuel(current, current_fuel, fuel_capacity, maze):
             new_cost = path_cost + cost_to_move()
-            new_time = current_time + time_to_move(next, action, maze)
+            new_time = current_time + time_to_move(next_state, action, maze)
             if action == "move":
                 new_fuel = current_fuel - cost_to_move()
             elif action == "refuel":
                 new_fuel = fuel_capacity
+                
+            state = (next_state, new_time, new_fuel)
+            if new_time <= time_limit and new_fuel >= 0:
+                if state not in reached or new_cost < reached[state]:
+                    reached[state] = new_cost
+                    priority = new_cost + heuristic(next_state, goal)
+                    frontier.put(priority, (new_cost, next_state, path, new_time, new_fuel))
 
-            if new_time <= time_limit and (next not in path or new_cost < path_cost or new_fuel >= 0):
-                priority = new_cost + heuristic(next, goal)
-                frontier.put(priority, (new_cost, next, path, new_time, new_fuel))
-    
     return None  # No path found within time limit
 
 def get_neighbors_with_fuel(current, fuel, fuel_capacity, maze):
@@ -88,12 +94,11 @@ def refuel_time(node, maze):
     x, y = node
     return abs(maze[x][y]) - 1
 
-file_path = 'input1_level3.txt'
+file_path = 'input.txt'
 n, m, time_limit, fuel_capacity, maze, positions = ReadInput.read_input_file(file_path)
 
 start = positions['S']  # Starting point 'S'
 goal = positions['G']  # Goal point 'G'
-
 path = a_star_fuel(start, goal, time_limit, fuel_capacity, maze)
 if path:
     print("Path found:", path)
