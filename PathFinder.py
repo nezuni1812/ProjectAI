@@ -243,13 +243,14 @@ class PathFinderLevel2(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> Optional[List[Tuple[int]]]:
         frontier = PriorityQueue()
         frontier.put((0, start, [], 0), 0)  # (priority, (path cost, current position, path, current_time))
-        
         reached = {}  # Dictionary to store the states with start position, time
         reached[(start, 0)] = 0  # The value of the key is the path cost of that state
         
         while not frontier.empty():
             path_cost, current, path, current_time = frontier.get()
             path = path + [current]
+            self.visualize_step(current)
+            print('Check:', current)
             
             if current == goal and current_time <= self.time_limit:
                 return path  
@@ -260,7 +261,6 @@ class PathFinderLevel2(PathFinder):
                 
                 state = (next, new_time)
                 if new_time <= self.time_limit and (state not in reached or new_cost < reached[state]):
-                    reached[state] = new_cost
                     priority = new_cost + self.heuristic(next, goal)
                     frontier.put((new_cost, next, path, new_time), priority)
         
