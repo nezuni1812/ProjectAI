@@ -1,6 +1,5 @@
 import heapq
 import random
-import matplotlib.pyplot as plt
 import numpy as np
 
 class PriorityQueue:
@@ -187,44 +186,28 @@ def calculate_path_time(path, maze):
             total_time += toll_booth_wait_time(next_pos, maze)
     return total_time
 
-def plot_maze(maze, path, agents):
-    fig, ax = plt.subplots(figsize=(12, 12))
-    maze_array = np.array(maze)
-
-    # Plot the maze
-    ax.imshow(maze_array, cmap=plt.cm.binary, origin='upper')
-
-    # Plot gas stations
-    gas_stations = np.argwhere(maze_array <= -2)
-    for station in gas_stations:
-        ax.plot(station[1], station[0], 'gs', markersize=10)
-
-    # Plot toll booths
-    toll_booths = np.argwhere((maze_array > 1) & (maze_array < 10))
-    for booth in toll_booths:
-        ax.plot(booth[1], booth[0], 'rs', markersize=10)
-
-    # Plot agent paths
-    colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
-    for agent, color in zip(agents, colors):
-        agent_path = [step for step in path if step[0] == agent.name]
-        positions = [pos for _, pos, _, _ in agent_path]
-        x, y = zip(*positions)
-        ax.plot(y, x, color + '-o', linewidth=2, markersize=8, label=f'Agent {agent.name}')
-
-        # Mark start and goal
-        ax.plot(agent.start[1], agent.start[0], color + 's', markersize=12, markeredgecolor='black')
-        ax.plot(agent.goal[1], agent.goal[0], color + '*', markersize=12, markeredgecolor='black')
-
-    ax.set_xticks(np.arange(maze_array.shape[1]))
-    ax.set_yticks(np.arange(maze_array.shape[0]))
-    ax.grid(True)
-    ax.set_xlim(-0.5, maze_array.shape[1] - 0.5)
-    ax.set_ylim(-0.5, maze_array.shape[0] - 0.5)
-    plt.gca().invert_yaxis()
-    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    plt.tight_layout()
-    plt.show()
+def get_agent_stop(path, agents, maze):
+    updated_path = []
+    stopped_agents = set()
+    
+    for step in path:
+        agent_name, current_pos, next_pos, action = step
+        agent = next(a for a in agents if a.name == agent_name)
+        
+        if agent_name not in stopped_agents:
+            agent_path = [s for s in path if s[0] == agent_name]
+            total_time = calculate_path_time(agent_path, maze)
+            
+            if total_time > agent.time_limit:
+                stopped_agents.add(agent_name)
+                # Add a "wait" action at the current position for the remaining time
+                remaining_time = agent.time_limit - calculate_path_time(updated_path, maze)
+                for _ in range(remaining_time):
+                    updated_path.append((agent_name, current_pos, current_pos, "wait"))
+            else:
+                updated_path.append(step)
+        
+    return updated_path
 
 # Example usage
 if __name__ == '__main__':
@@ -251,19 +234,18 @@ if __name__ == '__main__':
 
     # Find the path using WHCA*
     path = whca_star(agents, maze, fuel_capacity)
+    final_path = get_agent_stop(path, agents, maze)
 
     if path:
         print("Paths found:")
         print(path)
-        for agent in agents:
-            agent_path = [step for step in path if step[0] == agent.name]
-            total_time = calculate_path_time(agent_path, maze)
-            print(f"Agent {agent.name}:")
-            print(f"  Path: {agent_path}")
-            print(f"  Total time: {total_time}")
-            print(f"  Within time limit: {'Yes' if total_time <= agent.time_limit else 'No'}")
+        # for agent in agents:
+        #     agent_path = [step for step in path if step[0] == agent.name]
+        #     total_time = calculate_path_time(agent_path, maze)
+        #     print(f"Agent {agent.name}:")
+        #     print(f"  Path: {agent_path}")
+        #     print(f"  Total time: {total_time}")
+        #     print(f"  Within time limit: {'Yes' if total_time <= agent.time_limit else 'No'}")
 
-        # Plot the maze and paths
-        plot_maze(maze, path, agents)
     else:
         print("No path found for at least one agent.")
