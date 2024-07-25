@@ -211,29 +211,24 @@ class GBFSPathFinder(PathFinder):
         return None
 class AStarPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
-        start_node = self.Node(start, 0, self.heuristic(start, goal))
         frontier = PriorityQueue()
-        frontier.put(start_node, start_node.f_cost)
-        came_from = {start: None}
-        reached = {start: 0}
+        frontier.put((0, start, []), 0)  # (priority, (path cost, current position, path))
+        
         while not frontier.empty():
-            current = frontier.get()
-            print('Checking: ', current.position)
-            self.visualize_step(current.position)
-
-            if current.position == goal:
-                return self.reconstruct_path(came_from, start, goal)
-
-            for neighbor in self.get_neighbors(current.position, self.maze):
-                new_cost = reached[current.position] + 1
-
-                if neighbor not in reached or new_cost < reached[neighbor]:
-                    reached[neighbor] = new_cost
-                    priority = new_cost + self.heuristic(neighbor, goal)
-                    neighbor_node = self.Node(neighbor, new_cost, self.heuristic(neighbor, goal), current)
-                    frontier.put(neighbor_node, priority)
-                    came_from[neighbor] = current.position
-        return None
+            path_cost, current, path = frontier.get()
+            path = path + [current]
+            self.visualize_step(current)
+            
+            if current == goal:
+                return path  
+            
+            for next in self.get_neighbors(current, self.maze):
+                new_cost = path_cost + self.cost_to_move()
+                if next not in path or new_cost < path_cost:
+                    priority = new_cost + self.heuristic(next, goal)
+                    frontier.put((new_cost, next, path), priority)
+        
+        return None  
 
 
 # Implement A* algorithm for level 2    

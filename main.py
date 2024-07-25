@@ -16,7 +16,7 @@ def main():
     # dfs_finder  = PathFinder.DFSPathFinder(maze_grid, visualizer)
     # ucs_finder  = PathFinder.UCSPathFinder(maze_grid, visualizer)
     # gbfs_finder = PathFinder.GBFSPathFinder(maze_grid, visualizer)
-    # a_star_finder = PathFinder.AStarPathFinder(maze_grid, visualizer)
+    a_star_finder = PathFinder.AStarPathFinder(maze_grid, visualizer)
 
     # print("Running BFS...")
     # bfs_finder.start_visualizer(start, goal)
@@ -30,14 +30,14 @@ def main():
     # print("\nRunning GBFS...")
     # gbfs_finder.start_visualizer(start, goal)
 
-    # print("\nRunning A*...")
-    # a_star_finder.start_visualizer(start, goal)
+    print("\nRunning A*...")
+    a_star_finder.start_visualizer(start, goal)
 
     # Level 2 Test
-    level2_finder = PathFinder.PathFinderLevel2(maze_grid, visualizer)
-    level2_finder.set_time_limit(time_limit)
-    print("\nRunning A*_Level 2...")
-    level2_finder.start_visualizer(start, goal)
+    # level2_finder = PathFinder.PathFinderLevel2(maze_grid, visualizer)
+    # level2_finder.set_time_limit(time_limit)
+    # print("\nRunning A*_Level 2...")
+    # level2_finder.start_visualizer(start, goal)
 
 if __name__ == "__main__":
     main()
