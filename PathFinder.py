@@ -246,10 +246,13 @@ class PathFinderLevel2(PathFinder):
         reached = {}  # Dictionary to store the states with start position, time
         reached[(start, 0)] = 0  # The value of the key is the path cost of that state
         
+        self.visualizer.make_boxes()
+        self.visualizer.draw_screen()
+        
         while not frontier.empty():
             path_cost, current, path, current_time = frontier.get()
             path = path + [current]
-            self.visualize_step(current)
+            # self.visualize_step(current)
             print('Check:', current)
             
             if current == goal and current_time <= self.time_limit:
