@@ -3,18 +3,23 @@ import level4
 import ReadInput
 
 if __name__ == '__main__':
-    file_path = 'input1_level4.txt'
+    file_path = 'input2_level4.txt'
     n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
-    
-    agents = [
-        level4.Agent(starts[0], goals[0], fuel_capacity, time_limit, is_main=True, name="S"),
-        level4.Agent(starts[1], goals[1], fuel_capacity, time_limit, name="S1"),
-        level4.Agent(starts[2], goals[2], fuel_capacity, time_limit, name="S2"),
-    ]
+
+    agents = []
+    for i, (start, goal) in enumerate(zip(starts, goals)):
+        if i == 0:
+            # The first agent is the main agent
+            agents.append(level4.Agent(start, goal, fuel_capacity, time_limit, is_main=True, name="S"))
+        else:
+            # Other agents
+            agents.append(level4.Agent(start, goal, fuel_capacity, time_limit, name=f"S{i}"))
 
     # Find the path using WHCA*
     path = level4.whca_star(agents, maze, fuel_capacity)
     path = level4.get_agent_stop(path, agents, maze)
+    path = level4.generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity)
+    
     visuals =  Visualizer.Visualizer()
     
     visuals.set_map(raw_maze)
