@@ -92,7 +92,7 @@ def is_gas_station(node, maze):
 
 def refuel_time(node, maze):
     x, y = node
-    return abs(maze[x][y]) - 1
+    return abs(maze[x][y])
 
 # file_path = 'input3_level3.txt'
 # n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
