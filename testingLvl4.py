@@ -1,41 +1,23 @@
 import Visualizer
 import level4
+import ReadInput
 
 if __name__ == '__main__':
-    maze = [
-        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
-        [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
-        [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-        [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
-        [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-        [0, 0, -2, 0, -1, 4, -1, 8, -1, 0],  # -2 represents a gas station F1
-        [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-        [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
-        [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
-    ]
-
-    starts = [(1, 1),
-(8, 5),
-(2, 5)]
-    goals = [(7, 8),
-(4, 6),
-(9, 0)]
+    file_path = 'input1_level4.txt'
+    n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
     
     agents = [
-        level4.Agent(starts[0], goals[0], 10, time_limit=20, is_main=True, name="S"),
-        level4.Agent(starts[1], goals[1], 10, time_limit=20, name="S1"),
-        level4.Agent(starts[2], goals[2], 10, time_limit=10, name="S2"),
+        level4.Agent(starts[0], goals[0], fuel_capacity, time_limit, is_main=True, name="S"),
+        level4.Agent(starts[1], goals[1], fuel_capacity, time_limit, name="S1"),
+        level4.Agent(starts[2], goals[2], fuel_capacity, time_limit, name="S2"),
     ]
-
-    fuel_capacity = 10
 
     # Find the path using WHCA*
     path = level4.whca_star(agents, maze, fuel_capacity)
     path = level4.get_agent_stop(path, agents, maze)
     visuals =  Visualizer.Visualizer()
     
-    visuals.set_map(maze)
+    visuals.set_map(raw_maze)
     
     for i, point in enumerate(starts):
         visuals.add_point(point, 'S' if i == 0 else 'S' + str(i))
