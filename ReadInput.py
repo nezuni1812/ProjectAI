@@ -5,8 +5,8 @@ def read_input_file(file_path):
 
         raw_maze = []
         maze = []
-        start = []
-        goal = []
+        start = [None] * 10  # Initialize with None, assuming max 10 start points
+        goal = [None] * 10   # Initialize with None, assuming max 10 goal points
         for i in range(n):
             line = file.readline().strip().split()
             raw_row = line.copy()  # Copy the original row for raw maze
@@ -15,20 +15,16 @@ def read_input_file(file_path):
                 if value.startswith('S'):
                     processed_row.append(0)
                     if value == 'S':
-                        start.insert(0, (i, j)) 
+                        start[0] = (i, j)
                     else:
-                        index = int(value[1:])  # Extract the number after 'S'
-                        while len(start) <= index:
-                            start.append(None)
+                        index = int(value[1:])
                         start[index] = (i, j)
                 elif value.startswith('G'):
                     processed_row.append(0)
                     if value == 'G':
-                        goal.insert(0, (i, j)) 
+                        goal[0] = (i, j)
                     else:
-                        index = int(value[1:])  # Extract the number after 'G'
-                        while len(goal) <= index:
-                            goal.append(None)
+                        index = int(value[1:])
                         goal[index] = (i, j)
                 elif value.startswith('F'):
                     num = int(value[1:])  # Extract the number after 'F'
@@ -44,7 +40,7 @@ def read_input_file(file_path):
 
     return n, m, t, f, raw_maze, maze, start, goal
 
-# file_path = 'input1_level4.txt'
+# file_path = 'input2_level4.txt'
 # n, m, t, f, raw_maze, maze, start, goal = read_input_file(file_path)
 # print(f'n: {n}, m: {m}, t: {t}, f: {f}')
 # print('Maze:')

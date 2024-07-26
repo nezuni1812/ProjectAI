@@ -218,7 +218,7 @@ class GBFSPathFinder(PathFinder):
 class AStarPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
         frontier = PriorityQueue()
-        frontier.put((0, start, []), 0)  # (priority, (path cost, current position, path))
+        frontier.put(0, (0, start, []))  # (priority, (path cost, current position, path))
         reached = {}
         reached[start] = 0
         
@@ -235,7 +235,7 @@ class AStarPathFinder(PathFinder):
                 if next not in reached or new_cost < reached[next]:
                     reached[next] = new_cost
                     priority = new_cost + self.heuristic(next, goal)
-                    frontier.put((new_cost, next, path), priority)
+                    frontier.put(priority, (new_cost, next, path))
         
         return None  
 
