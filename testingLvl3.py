@@ -2,13 +2,14 @@ import Visualizer
 import level3
 import ReadInput
 
-file_path = 'input.txt'
-n, m, time_limit, fuel_capacity, raw_maze, maze, positions = ReadInput.read_input_file(file_path)
+file_path = 'input3_level3.txt'
+n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
 
-start = positions['S']  # Starting point 'S'
-goal = positions['G']  # Goal point 'G'
+start = starts[0]  # Starting point 'S'
+goal = goals[0]  # Goal point 'G'
 path = level3.a_star_fuel(start, goal, time_limit, fuel_capacity, maze)
 visualizer = Visualizer.Visualizer(raw_maze)
+# visualizer.root.mainloop()
 if path:
     print("Path found:", path)
     total_cost = sum(level3.cost_to_move() for i in range(len(path)-1))
