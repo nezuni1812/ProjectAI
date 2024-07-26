@@ -255,7 +255,7 @@ class PathFinderLevel2(PathFinder):
             # self.visualize_step(current)
             print('Check:', current)
             
-            if current == goal and current_time <= self.time_limit:
+            if current == goal:
                 return path  
             
             for next in self.get_neighbors(current, self.maze):
@@ -264,6 +264,7 @@ class PathFinderLevel2(PathFinder):
                 
                 state = (next, new_time)
                 if new_time <= self.time_limit and (state not in reached or new_cost < reached[state]):
+                    reached[state] = new_cost
                     priority = new_cost + self.heuristic(next, goal)
                     frontier.put((new_cost, next, path, new_time), priority)
         
