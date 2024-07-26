@@ -45,8 +45,8 @@ class Visualizer:
         self.PAD = 3
         
         self.colors = {
-            0: '#fff',
-            -1: '#647687',
+            "0": '#fff',
+            "-1": '#647687',
             'S': '#d5e8d4',
             'G': '#f8cecc',
             'F': '#fff2cc',

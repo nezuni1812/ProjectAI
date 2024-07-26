@@ -4,7 +4,7 @@ import ReadInput
 
 def main():
     file_path = 'input1_level2.txt'
-    n, m, time_limit, fuel_capacity, maze_grid, positions = ReadInput.read_input_file(file_path)
+    n, m, time_limit, fuel_capacity, maze_grid, maze, positions = ReadInput.read_input_file(file_path)
 
     start = positions['S']  # Starting point 'S'
     goal = positions['G']  # Goal point 'G'
@@ -35,7 +35,7 @@ def main():
     # a_star_finder.start_visualizer(start, goal)
 
     # Level 2 Test
-    level2_finder = PathFinder.PathFinderLevel2(maze_grid, visualizer)
+    level2_finder = PathFinder.PathFinderLevel2(maze, visualizer)
     level2_finder.set_time_limit(time_limit)
     level2_finder.visualizer.set_map(maze_grid)
     
