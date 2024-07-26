@@ -164,7 +164,7 @@ class UCSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         visited = set()
         frontier = PriorityQueue()
-        frontier.put(start, 0)
+        frontier.put(0, start)  # Note the order: (priority, item)
         came_from = {start: None}
         cost_so_far = {start: 0}
 
@@ -183,10 +183,11 @@ class UCSPathFinder(PathFinder):
                 if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
                     cost_so_far[neighbor] = new_cost
                     priority = new_cost
-                    frontier.put(neighbor, priority)
+                    frontier.put(priority, neighbor)
                     came_from[neighbor] = current
 
         return None
+
     
 
 class GBFSPathFinder(PathFinder):
@@ -195,7 +196,7 @@ class GBFSPathFinder(PathFinder):
             return [start]
         
         frontier = PriorityQueue()
-        frontier.put(start, 0)
+        frontier.put(0, start)
         came_from: Dict[Tuple[int, int], Optional[Tuple[int, int]]] = {start: None}
         reached: Set[Tuple[int, int]] = set([start])
         
@@ -211,7 +212,7 @@ class GBFSPathFinder(PathFinder):
                 if child not in reached:
                     reached.add(child)
                     came_from[child] = current
-                    frontier.put(child, self.heuristic(child, goal)) 
+                    frontier.put(self.heuristic(child, goal), child) 
         return None
         
 class AStarPathFinder(PathFinder):
