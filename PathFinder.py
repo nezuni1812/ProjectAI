@@ -12,7 +12,7 @@ class PriorityQueue:
     def empty(self) -> bool:
         return len(self.elements) == 0
     
-    def put(self, item, priority):
+    def put(self, priority, item):
         heapq.heappush(self.elements, (priority, item))
     
     def get(self):
@@ -246,15 +246,15 @@ class PathFinderLevel2(PathFinder):
 
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> Optional[List[Tuple[int]]]:
         frontier = PriorityQueue()
-        frontier.put((0, start, [], 0), 0)  # (priority, (path cost, current position, path, current_time))
+        frontier.put(0 + self.heuristic(start, goal), (0, 0, start, []))  # (priority, (path cost, current_time, current position, path))
         reached = {}  # Dictionary to store the states with start position, time
-        reached[(start, 0)] = 0  # The value of the key is the path cost of that state
+        reached[(start, 0)] = 0  # The value of the key is the path cost of that state(positions, time)
         
         self.visualizer.make_boxes()
         self.visualizer.draw_screen()
         
         while not frontier.empty():
-            path_cost, current, path, current_time = frontier.get()
+            path_cost, current_time, current, path = frontier.get()
             path = path + [current]
             # self.visualize_step(current)
             print('Check:', current)
@@ -270,6 +270,6 @@ class PathFinderLevel2(PathFinder):
                 if new_time <= self.time_limit and (state not in reached or new_cost < reached[state]):
                     reached[state] = new_cost
                     priority = new_cost + self.heuristic(next, goal)
-                    frontier.put((new_cost, next, path, new_time), priority)
+                    frontier.put(priority, (new_cost, new_time, next, path))
         
         return None  # No path found within time limit

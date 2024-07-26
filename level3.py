@@ -16,16 +16,16 @@ class PriorityQueue:
     
 def a_star_fuel(start, goal, time_limit, fuel_capacity, maze):
     frontier = PriorityQueue()
-    frontier.put(0 + heuristic(start, goal), (0, start, [], 0, fuel_capacity))
+    frontier.put(0 + heuristic(start, goal), (0, 0, fuel_capacity, start, []))
     
     reached = {}  # Dictionary to store the states with path cost, time, and fuel
     reached[(start, 0, fuel_capacity)] = 0  # Store the initial state
 
     while not frontier.empty():
-        path_cost, current, path, current_time, current_fuel = frontier.get()
+        path_cost, current_time, current_fuel, current, path = frontier.get()
         path = path + [current]
 
-        if current == goal and current_time <= time_limit:
+        if current == goal:
             return path
 
         for next_state, new_fuel, action in get_neighbors_with_fuel(current, current_fuel, fuel_capacity, maze):
@@ -41,7 +41,7 @@ def a_star_fuel(start, goal, time_limit, fuel_capacity, maze):
                 if state not in reached or new_cost < reached[state]:
                     reached[state] = new_cost
                     priority = new_cost + heuristic(next_state, goal)
-                    frontier.put(priority, (new_cost, next_state, path, new_time, new_fuel))
+                    frontier.put(priority, (new_cost, new_time, new_fuel, next_state, path))
 
     return None  # No path found within time limit
 
@@ -94,15 +94,15 @@ def refuel_time(node, maze):
     x, y = node
     return abs(maze[x][y]) - 1
 
-file_path = 'input.txt'
-n, m, time_limit, fuel_capacity, maze, positions = ReadInput.read_input_file(file_path)
+# file_path = 'input3_level3.txt'
+# n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
 
-start = positions['S']  # Starting point 'S'
-goal = positions['G']  # Goal point 'G'
-path = a_star_fuel(start, goal, time_limit, fuel_capacity, maze)
-if path:
-    print("Path found:", path)
-    total_cost = sum(cost_to_move() for i in range(len(path)-1))
-    print(f"Total cost: {total_cost}")
-else:
-    print("No path found within the given constraints.")
+# start = starts[0]  # Starting point 'S'
+# goal = goals[0]  # Goal point 'G'
+# path = a_star_fuel(start, goal, time_limit, fuel_capacity, maze)
+# if path:
+#     print("Path found:", path)
+#     total_cost = sum(cost_to_move() for i in range(len(path)-1))
+#     print(f"Total cost: {total_cost}")
+# else:
+#     print("No path found within the given constraints.")
