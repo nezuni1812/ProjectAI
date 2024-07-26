@@ -53,7 +53,7 @@ class Visualizer:
         }
         
         self.root = Tk()
-        self.root.geometry('520x600')
+        self.root.geometry('980x600')
         self.root.configure(background='#696969')
         
         self.canvas = Canvas()
