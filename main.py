@@ -4,7 +4,7 @@ import ReadInput
 import tkinter as tk
 
 def main():
-    file_path = 'input.txt'
+    file_path = 'input1_level1.txt'
     n, m, time_limit, fuel_capacity, maze_grid, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     start = starts[0]  # Starting point 'S'

@@ -82,7 +82,7 @@ class PathFinder(ABC):
             for node in path:
                 self.visualizer.update_current(node)
                 self.visualizer.draw_screen()
-                time.sleep(.001)
+                self.visualizer.root.after(50)
         
         else:
             print("No path found.")
@@ -103,7 +103,7 @@ class PathFinder(ABC):
         if current is not None:
             self.visualizer.update_current(current)
         self.visualizer.draw_screen()
-        self.visualizer.root.after(80)
+        self.visualizer.root.after(50)
 
     # Functions for level 2: Time limitation
     @staticmethod
