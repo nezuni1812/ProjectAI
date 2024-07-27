@@ -131,6 +131,7 @@ class PathFinder(ABC):
 class BFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         if start == goal:
+            self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'))
             return [start]
 
         frontier = [(start, [start])]
@@ -145,8 +146,9 @@ class BFSPathFinder(PathFinder):
 
             for next_node in self.get_neighbors(current, self.maze):
                 if next_node == goal:
-                    self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success', 'green'))
-                    return path + [next_node]
+                    path = path + [next_node]
+                    self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                    return path
                 if next_node not in reached:
                     reached.add(next_node)
                     frontier.append((next_node, path + [next_node]))
@@ -158,6 +160,7 @@ class BFSPathFinder(PathFinder):
 class DFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
         if start == goal:
+            self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'))
             return [start]
         
         stack = [(start, [start])]
@@ -171,8 +174,9 @@ class DFSPathFinder(PathFinder):
             for next in self.get_neighbors(current, self.maze):
                 if next not in visited:
                     if next == goal:
-                        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success', 'green'))
-                        return path + [next]
+                        path = path + [next]
+                        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                        return path
                     stack.append((next, path + [next]))
                     visited.add(next)
         return None
@@ -190,8 +194,9 @@ class UCSPathFinder(PathFinder):
             self.visualize_step(current, 'Uniform-cost Search', 'Level 1')
 
             if current == goal:
-                self.visualize_step(headline='Uniform-cost Search', lvl_name='Level 1: Basic', result=('Success', 'green'))
-                return self.reconstruct_path(came_from, start, goal)
+                path = self.reconstruct_path(came_from, start, goal)
+                self.visualize_step(headline='Uniform-cost Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                return path
 
             visited.add(current)
 
@@ -211,6 +216,7 @@ class UCSPathFinder(PathFinder):
 class GBFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         if start == goal:
+            self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'))
             return [start]
         
         frontier = PriorityQueue()
@@ -224,8 +230,9 @@ class GBFSPathFinder(PathFinder):
             self.visualize_step(current, 'Greedy best first Search', 'Level 1')
             
             if current == goal:
-                self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success', 'green'))
-                return self.reconstruct_path(came_from, start, goal)
+                path = self.reconstruct_path(came_from, start, goal)
+                self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                return path
             
             for child in self.get_neighbors(current, self.maze):
                 if child not in reached:
@@ -249,7 +256,7 @@ class AStarPathFinder(PathFinder):
             self.visualize_step(current, 'A* Search', 'Level 1: Basic')
             
             if current == goal:
-                self.visualize_step(headline='A* Search', lvl_name='Level 1: Basic', result=('Success', 'green'))
+                self.visualize_step(headline='A* Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
                 return path  
             
             for next in self.get_neighbors(current, self.maze):
