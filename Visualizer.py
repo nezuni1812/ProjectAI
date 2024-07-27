@@ -57,10 +57,8 @@ class Visualizer:
         self.maze = map
     
     def draw_screen(self):
-        # start = time.time()
         self.canvas.pack()
         self.root.update()
-        # print('Draw:', time.time() - start)
         
     def create_transparent_rectangle(self, x1, y1, x2, y2, **kwargs):
         transparent_image = None
@@ -68,7 +66,8 @@ class Visualizer:
             alpha = int(kwargs.pop('alpha') * 255)
             fill = kwargs.pop('fill')
             fill = self.root.winfo_rgb(fill) + (alpha,)
-            image = Image.new('RGBA', (x2-x1, y2-y1), fill)
+            new_col = (int(fill[0]/65535*255),int(fill[1]/65535*255),int(fill[2]/65535*255),alpha)
+            image = Image.new('RGBA', (x2-x1, y2-y1), new_col)
             self.images.append(ImageTk.PhotoImage(image))
             transparent_image = self.canvas.create_image(x1, y1, image=self.images[-1], anchor='nw')
         if transparent_image is not None:
@@ -101,11 +100,12 @@ class Visualizer:
             'S1': 'blue',
             'S2': 'green',
             'S3': 'purple',
-            'S4': 'orange',
-            'S5': '#fff2cc',
-            'S6': '#f8cecc',
-            'S7': '#d0e0e3',
-            'S8': '#ffe6cc'
+            'S4': 'dark orange',
+            'S5': 'maroon3',
+            'S6': 'gray38',
+            'S7': 'darkcyan',
+            'S8': 'dark slate gray',
+            'S9': 'sienna',
         }
         
         lef_padding = len(self.maze[0]) * 50 + 20
