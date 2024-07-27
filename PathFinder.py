@@ -91,14 +91,16 @@ class PathFinder(ABC):
     def visualize_step(self, current: Tuple[int, int] = None, headline = None, lvl_name = None, result = None, more_text = None):
         self.visualizer.canvas.delete('all')
         self.visualizer.make_boxes()
+        # self.maze
+        lef_padding = len(self.maze[0]) * 50 + 20
         if lvl_name is not None:
-            self.visualizer.canvas.create_text(520, 12, text=lvl_name, font=('Cascadia Code', 14, 'bold'), anchor='nw')
+            self.visualizer.canvas.create_text(lef_padding, 12, text=lvl_name, font=('Cascadia Code', 14, 'bold'), anchor='nw')
         if headline is not None:
-            self.visualizer.canvas.create_text(520, 32, text=headline, font=('Cascadia Code', 14), anchor='nw')
+            self.visualizer.canvas.create_text(lef_padding, 32, text=headline, font=('Cascadia Code', 14), anchor='nw')
         if result is not None:
-            self.visualizer.canvas.create_text(520, 52, text=result[0], font=('Cascadia Code', 14), anchor='nw', fill=result[1])
+            self.visualizer.canvas.create_text(lef_padding, 52, text=result[0], font=('Cascadia Code', 14), anchor='nw', fill=result[1])
         if more_text is not None:
-            self.visualizer.canvas.create_text(520, 72, text=result, font=('Cascadia Code', 14), anchor='nw')
+            self.visualizer.canvas.create_text(lef_padding, 72, text=result, font=('Cascadia Code', 14), anchor='nw')
         if current is not None:
             self.visualizer.update_current(current)
         self.visualizer.draw_screen()
