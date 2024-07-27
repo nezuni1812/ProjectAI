@@ -26,9 +26,6 @@ class Visualizer:
         else:
             self.maze = map
         
-        self.toggle = True
-        self.toggleCurrent = True
-        
         self.BOX_WIDTH = 50
         self.PAD = 3
         
