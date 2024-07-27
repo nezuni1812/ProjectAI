@@ -108,19 +108,15 @@ class Visualizer:
             'S8': '#ffe6cc'
         }
         
-        txt = self.canvas.create_text(450, 50, text='Step', font=('Cascadia Code', 14), anchor='nw')
-        self.canvas.create_text(450, 120, text='<Arrow right> for next move\n<Enter> for autoplay', font=('Cascadia Code', 14), anchor='nw')
-        self.canvas.itemconfigure(txt, text = 'hey')
+        lef_padding = len(self.maze[0]) * 50 + 20
+        txt = self.canvas.create_text(lef_padding, 50, text='Step', font=('Cascadia Code', 14), anchor='nw')
+        self.canvas.create_text(lef_padding, 120, text='<Arrow right> for next move\n<Enter> for autoplay', font=('Cascadia Code', 14), anchor='nw')
         
         self.move = True
         self.autoplay = False
         
         self.root.bind("<Return>", lambda *args: self.toggle_autoplay())
         self.root.bind("<Right>", lambda *args: self.next())
-        # btton = Button(self.root, text='Next move', command=lambda *args: self.next())
-        # btton.place(x=65, y=100)
-        
-        # self.root.mainloop()
         
         for step in path:
             # Position for current node
@@ -164,7 +160,9 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text='G' + step[0][1], font=('Cascadia Code', 14))
             else:
                 if 'wait' in step[3]:
-                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '..', font=('Cascadia Code', 14))
+                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '⌛', font=('Cascadia Code', 14))
+                elif 'refuel' in step[3]:
+                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '⛽', font=('Cascadia Code', 14))
                 else:
                     current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0], font=('Cascadia Code', 14))
                     
@@ -187,7 +185,7 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 self.canvas.delete(current_cell_txt)
             self.canvas.delete(outline)
             
-        self.canvas.create_text(520, 32, text='Main agent has reached the goal', font=('Cascadia Code', 14), anchor='nw', fill='green')
+        self.canvas.create_text(lef_padding, 32, text='Main agent has reached the goal', font=('Cascadia Code', 14), anchor='nw', fill='green')
         
     
     def add_point(self, start, txt):
