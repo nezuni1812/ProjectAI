@@ -140,7 +140,7 @@ class BFSPathFinder(PathFinder):
         while frontier:
             current, path = frontier.pop(0)
             # self.visualizer.canvas.create_text(690, 12, text='Algorithm: Breadth first Search', font=('Cascadia Code', 14))
-            self.visualize_step(current, 'Breadth first Search', 'Level 1', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
+            self.visualize_step(current, 'Breadth first Search', 'Level 1: Basic', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             # self.visualizer.root.after(400)
 
             for next_node in self.get_neighbors(current, self.maze):
@@ -192,7 +192,7 @@ class UCSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             
-            self.visualize_step(current, 'Uniform-cost Search', 'Level 1', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
+            self.visualize_step(current, 'Uniform-cost Search', 'Level 1: Basic', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
 
             if current == goal:
                 path = self.reconstruct_path(came_from, start, goal)
@@ -228,7 +228,7 @@ class GBFSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             
-            self.visualize_step(current, 'Greedy best first Search', 'Level 1', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
+            self.visualize_step(current, 'Greedy best first Search', 'Level 1: Basic', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             
             if current == goal:
                 path = self.reconstruct_path(came_from, start, goal)
