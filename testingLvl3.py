@@ -23,6 +23,8 @@ if path:
 
     visualizer.root.after(2500)
     for node in path:
+        # visualizer.canvas.delete('all')
+        visualizer.make_boxes()
         visualizer.update_current(node)
         visualizer.draw_screen()
         visualizer.root.after(200)

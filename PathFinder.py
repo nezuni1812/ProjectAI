@@ -131,7 +131,7 @@ class PathFinder(ABC):
 class BFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         if start == goal:
-            self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'))
+            self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             return [start]
 
         frontier = [(start, [start])]
@@ -140,26 +140,26 @@ class BFSPathFinder(PathFinder):
         while frontier:
             current, path = frontier.pop(0)
             # self.visualizer.canvas.create_text(690, 12, text='Algorithm: Breadth first Search', font=('Cascadia Code', 14))
-            self.visualize_step(current, 'Breadth first Search', 'Level 1')
+            self.visualize_step(current, 'Breadth first Search', 'Level 1', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             # self.visualizer.root.after(400)
 
             for next_node in self.get_neighbors(current, self.maze):
                 if next_node == goal:
                     path = path + [next_node]
-                    self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                    self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
                     return path
                 if next_node not in reached:
                     reached.add(next_node)
                     frontier.append((next_node, path + [next_node]))
         
-        self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'))
+        self.visualize_step(headline='Breadth first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
         return None
     
     
 class DFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int], goal: Tuple[int]) -> List[Tuple[int]] | None:
         if start == goal:
-            self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'))
+            self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             return [start]
         
         stack = [(start, [start])]
@@ -168,18 +168,18 @@ class DFSPathFinder(PathFinder):
         
         while stack:
             current, path = stack.pop()
-            self.visualize_step(current, 'Depth-first Search', 'Level 1')
+            self.visualize_step(current, 'Depth-first Search', 'Level 1: Basic', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
 
             for next in self.get_neighbors(current, self.maze):
                 if next not in visited:
                     if next == goal:
                         path = path + [next]
-                        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
                         return path
                     stack.append((next, path + [next]))
                     visited.add(next)
         
-        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'))
+        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
         return None
 class UCSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
@@ -192,11 +192,11 @@ class UCSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             
-            self.visualize_step(current, 'Uniform-cost Search', 'Level 1')
+            self.visualize_step(current, 'Uniform-cost Search', 'Level 1', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
 
             if current == goal:
                 path = self.reconstruct_path(came_from, start, goal)
-                self.visualize_step(headline='Uniform-cost Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                self.visualize_step(headline='Uniform-cost Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
                 return path
 
             visited.add(current)
@@ -209,7 +209,7 @@ class UCSPathFinder(PathFinder):
                     frontier.put(priority, neighbor)
                     came_from[neighbor] = current
 
-        self.visualize_step(headline='Uniform-cost Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'))
+        self.visualize_step(headline='Uniform-cost Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
         return None
 
     
@@ -217,7 +217,7 @@ class UCSPathFinder(PathFinder):
 class GBFSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         if start == goal:
-            self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'))
+            self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: 1', 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             return [start]
         
         frontier = PriorityQueue()
@@ -228,11 +228,11 @@ class GBFSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             
-            self.visualize_step(current, 'Greedy best first Search', 'Level 1')
+            self.visualize_step(current, 'Greedy best first Search', 'Level 1', more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
             
             if current == goal:
                 path = self.reconstruct_path(came_from, start, goal)
-                self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
                 return path
             
             for child in self.get_neighbors(current, self.maze):
@@ -241,7 +241,7 @@ class GBFSPathFinder(PathFinder):
                     came_from[child] = current
                     frontier.put(self.heuristic(child, goal), child) 
                     
-        self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'))
+        self.visualize_step(headline='Greedy best first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
         return None
         
 class AStarPathFinder(PathFinder):
@@ -257,7 +257,7 @@ class AStarPathFinder(PathFinder):
             self.visualize_step(current, 'A* Search', 'Level 1: Basic')
             
             if current == goal:
-                self.visualize_step(headline='A* Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'))
+                self.visualize_step(headline='A* Search', lvl_name='Level 1: Basic', result=('Success. Total cost: ' + str(len(path) - 1), 'green'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
                 return path  
             
             for next in self.get_neighbors(current, self.maze):
@@ -267,7 +267,7 @@ class AStarPathFinder(PathFinder):
                     priority = new_cost + self.heuristic(next, goal)
                     frontier.put(priority, (new_cost, next, path))
         
-        self.visualize_step(headline='A* Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'))
+        self.visualize_step(headline='A* Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'), more_text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm')
         return None  
 
 # Implement A* algorithm for level 2: Time limitation    
