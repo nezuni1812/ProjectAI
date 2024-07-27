@@ -28,18 +28,23 @@ def main():
     
     print("Running BFS...")
     #bfs_finder.start_visualizer(start, goal)
+    visualizer.root.after(300)
     
     print("\nRunning DFS...")
     dfs_finder.start_visualizer(start, goal)
-    bfs_finder.visualizer.root.mainloop()
+    visualizer.root.after(300)
+    
     print("\nRunning UCS...")
     ucs_finder.start_visualizer(start, goal)
+    visualizer.root.after(300)
 
     print("\nRunning GBFS...")
     gbfs_finder.start_visualizer(start, goal)
+    visualizer.root.after(300)
 
     print("\nRunning A*...")
     a_star_finder.start_visualizer(start, goal)
+    visualizer.root.after(300)
 
 
     # Level 2 Test

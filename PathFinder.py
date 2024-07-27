@@ -179,6 +179,8 @@ class DFSPathFinder(PathFinder):
                         return path
                     stack.append((next, path + [next]))
                     visited.add(next)
+        
+        self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('No path found :<', 'red'))
         return None
 class UCSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
