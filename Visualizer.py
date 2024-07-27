@@ -22,18 +22,6 @@ class Visualizer:
     # Declare all attributes, CONSTs, variables
     def __init__(self, map: list = None, init_func = None) -> None:
         if map is None:
-            # self.maze = [
-            #     [0, 0, 0, -1, -1, 0, 0, 0, 0, 0],
-            #     [0, 'S', 0, 0, 0, 0, 0, -1, 0, -1],
-            #     [0, 0, -1, -1, -1, 'S1', 0, -1, 0, -1],
-            #     [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-            #     [0, 0, -1, -1, -1, 0, 'G2', -1, -1, 0],
-            #     [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-            #     [0, 0, 'F1', 0, -1, 4, -1, 8, -1, 0],
-            #     [0, 0, 0, 0, -1, 0, 0, 0, 'G', 0],
-            #     [0, -1, -1, -1, -1, 'S2', 0, 0, 0, 0],
-            #     ['G1', 0, 5, 0, 0, 0, -1, -1, -1, 0],
-            # ]
             self.maze = []
         else:
             self.maze = map
@@ -53,7 +41,7 @@ class Visualizer:
         }
         
         self.root = Tk()
-        self.root.geometry('980x600')
+        self.root.geometry('980x650')
         self.root.configure(background='#696969')
         
         self.canvas = Canvas()
