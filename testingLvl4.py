@@ -3,7 +3,7 @@ import level4
 import ReadInput
 
 if __name__ == '__main__':
-    file_path = 'input3_level4.txt'
+    file_path = 'input4_level4.txt'
     n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     agents = []
@@ -16,12 +16,15 @@ if __name__ == '__main__':
             agents.append(level4.Agent(start, goal, fuel_capacity, time_limit, name=f"S{i}"))
 
     # Find the path using WHCA*
-    path = level4.whca_star(agents, maze, fuel_capacity)
-    path = level4.get_agent_stop(path, agents, maze)
-    path = level4.generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity)
-    
+    try:
+        path = level4.whca_star(agents, maze, fuel_capacity)
+        path = level4.get_agent_stop(path, agents, maze)
+        path = level4.generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity)
+    except:
+        print("No path found for at least one agent.")
+        path = None
+
     visuals =  Visualizer.Visualizer()
-    
     visuals.set_map(raw_maze)
     
     print(raw_maze)
