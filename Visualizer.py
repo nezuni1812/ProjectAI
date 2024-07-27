@@ -63,14 +63,17 @@ class Visualizer:
         # print('Draw:', time.time() - start)
         
     def create_transparent_rectangle(self, x1, y1, x2, y2, **kwargs):
+        transparent_image = None
         if 'alpha' in kwargs:
             alpha = int(kwargs.pop('alpha') * 255)
             fill = kwargs.pop('fill')
             fill = self.root.winfo_rgb(fill) + (alpha,)
             image = Image.new('RGBA', (x2-x1, y2-y1), fill)
             self.images.append(ImageTk.PhotoImage(image))
-            self.canvas.create_image(x1, y1, image=self.images[-1], anchor='nw')
-        self.canvas.create_rectangle(x1, y1, x2, y2, **kwargs)
+            transparent_image = self.canvas.create_image(x1, y1, image=self.images[-1], anchor='nw')
+        if transparent_image is not None:
+            return transparent_image
+        return self.canvas.create_rectangle(x1, y1, x2, y2, **kwargs)
     
     def next(self):
         self.move = not self.move
@@ -105,8 +108,8 @@ class Visualizer:
             'S8': '#ffe6cc'
         }
         
-        txt = self.canvas.create_text(650, 50, text='Step', font=('Cascadia Code', 14))
-        self.canvas.create_text(690, 120, text='<Arrow right> for next move\n<Enter> for autoplay', font=('Cascadia Code', 14))
+        txt = self.canvas.create_text(450, 50, text='Step', font=('Cascadia Code', 14), anchor='nw')
+        self.canvas.create_text(450, 120, text='<Arrow right> for next move\n<Enter> for autoplay', font=('Cascadia Code', 14), anchor='nw')
         self.canvas.itemconfigure(txt, text = 'hey')
         
         self.move = True
@@ -134,7 +137,7 @@ class Visualizer:
             before_x1 = (before_i + 1)*self.BOX_WIDTH + self.PAD
             before_y1 = (before_j + 1)*self.BOX_WIDTH + self.PAD
             
-            self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.8)
+            curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.8)
             outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline=colrs[step[0]], width=3)
             # outline = self.canvas.create_rectangle(x0, y0, x1, y1, outline='white', width=2)
             print(x0, y0, x1, y1)
@@ -147,6 +150,7 @@ class Visualizer:
                 self.canvas.after(1)
                 self.root.update()
                 
+            # self.canvas.delete('all')
             # self.canvas.move(outline, )
             self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0], font=('Cascadia Code', 14))
             
@@ -158,6 +162,7 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 
             if self.autoplay:
                 self.root.after(200)
+                self.canvas.delete(curren_box)
                 self.canvas.delete(outline)
                 continue
             
@@ -165,8 +170,7 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 self.root.update()
             # time.sleep(0.4)
             self.canvas.delete(outline)
-        
-            
+            self.canvas.delete(curren_box)
         
     
     def add_point(self, start, txt):

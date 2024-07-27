@@ -3,7 +3,7 @@ import level4
 import ReadInput
 
 if __name__ == '__main__':
-    file_path = 'input2_level4.txt'
+    file_path = 'input1_level4.txt'
     n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     agents = []
@@ -50,6 +50,7 @@ if __name__ == '__main__':
         # level4.plot_maze(maze, path, agents)
         visuals.draw_path_turn_based(path)
         
-        # visuals.root.mainloop()
+        # Make the screen stay alive
+        visuals.root.mainloop()
     else:
         print("No path found for at least one agent.")
