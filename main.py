@@ -48,7 +48,7 @@ def main():
     #level2_finder.visualizer.set_map(maze_grid)
     
     print("\nRunning A*_Level 2...")
-    level2_finder.start_visualizer(start, goal)
+    #level2_finder.start_visualizer(start, goal)
     # Make the screen stay alive
     #level2_finder.visualizer.root.mainloop()
 

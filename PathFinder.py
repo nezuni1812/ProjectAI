@@ -166,7 +166,6 @@ class DFSPathFinder(PathFinder):
         
         while stack:
             current, path = stack.pop()
-            print('Checking: ', current)
             self.visualize_step(current, 'Depth-first Search', 'Level 1')
 
             for next in self.get_neighbors(current, self.maze):
@@ -175,6 +174,7 @@ class DFSPathFinder(PathFinder):
                         self.visualize_step(headline='Depth-first Search', lvl_name='Level 1: Basic', result=('Success', 'green'))
                         return path + [next]
                     stack.append((next, path + [next]))
+                    visited.add(next)
         return None
 class UCSPathFinder(PathFinder):
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
