@@ -252,7 +252,8 @@ def generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity):
         for step in path:
             result_path.append(step)
             agent_name, old_position, current_position, action = step
-
+            if action == "createnewgoal":
+                continue
             # Determine the index of the agent
             if len(agent_name) > 1:
                 index_agent = int(agent_name[1:])
@@ -268,6 +269,7 @@ def generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity):
             if agent_name != 'S' and current_position == agents[index_agent].goal:
                 print(f"Sub-agent {agent_name} has reached the goal.")
                 new_position = generate_new_position(maze)
+                result_path.append((agent_name, current_position, new_position, "createnewgoal"))
                 print(new_position)
                 if new_position:
                     agents[index_agent].start = current_position
