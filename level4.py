@@ -209,34 +209,87 @@ def get_agent_stop(path, agents, maze):
         
     return updated_path
 
+# def generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity):
+#     result_path = []
+#     for step in path:
+#         result_path.append(step)
+#         agent_name, old_position, current_position, action = step
+
+#         if len(agent_name) > 1:
+#             index_agent = int(agent_name[1:])
+#             agents[index_agent].start = current_position
+#         else:
+#             agents[0].start = current_position
+
+#         if agent_name == 'S' and current_position == agents[0].goal:
+#             print("Main agent S has reached the goal.")
+#             return result_path
+
+#         if agent_name != 'S' and current_position == agents[index_agent].goal:
+#             print(f"Sub-agent {agent_name} has reached the goal.")
+#             new_position = generate_new_position(maze)
+#             if new_position:
+#                 agents[index_agent].start = current_position
+#                 agents[index_agent].goal = new_position
+
+#                 print(new_position)
+#                 path = whca_star(agents, maze, fuel_capacity)
+#                 if path is None:
+#                     print("No path found for at least one agent.")
+#                     return result_path
+#                 else:
+#                     result_path.extend(path)
+#                     break
+#             return result_path 
+        
+#     return result_path
+
 def generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity):
     result_path = []
-    for step in path:
-        result_path.append(step)
-        agent_name, old_position, current_position, action = step
-        if len(agent_name) > 1:
-            index_agent = int(agent_name[1:])
-        
-        if agent_name == 'S' and current_position == agents[0].goal:
-            print("Main agent S has reached the goal.")
-            return result_path
+    while True:
+        new_path_segment = []
 
-        if agent_name != 'S' and current_position == agents[index_agent].goal:
-            print(f"Sub-agent {agent_name} has reached the goal.")
-            new_position = generate_new_position(maze)
-            if new_position:
+        for step in path:
+            result_path.append(step)
+            agent_name, old_position, current_position, action = step
+
+            # Determine the index of the agent
+            if len(agent_name) > 1:
+                index_agent = int(agent_name[1:])
                 agents[index_agent].start = current_position
-                agents[index_agent].goal = new_position
+            else:
+                index_agent = 0
+                agents[0].start = current_position
+
+            if agent_name == 'S' and current_position == agents[0].goal:
+                print("Main agent S has reached the goal.")
+                return result_path
+
+            if agent_name != 'S' and current_position == agents[index_agent].goal:
+                print(f"Sub-agent {agent_name} has reached the goal.")
+                new_position = generate_new_position(maze)
                 print(new_position)
-                path = whca_star(agents, maze, fuel_capacity)
-                if path is None:
-                    print("No path found for at least one agent.")
-                    return result_path
-                else:
-                    result_path.extend(path)
-                    break
-            return result_path 
+                if new_position:
+                    agents[index_agent].start = current_position
+                    agents[index_agent].goal = new_position
+
+                    print(f"New goal for {agent_name}: {new_position}")
+                    new_path_segment = whca_star(agents, maze, fuel_capacity)
+                    if new_path_segment is None:
+                        print("No path found for at least one agent.")
+                        return result_path
+                    else:
+                        # Prepare to continue with the new path segment
+                        path = new_path_segment
+                        break
         
+        # If no new path segment was generated, break the loop
+        if not new_path_segment:
+            break
+
+        # Continue the outer loop with the new path segment
+        path = new_path_segment
+
     return result_path
 
 # Hàm lấy vị trí hiện tại của các agent 

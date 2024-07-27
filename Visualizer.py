@@ -110,7 +110,7 @@ class Visualizer:
             'S1': 'blue',
             'S2': 'green',
             'S3': 'purple',
-            'S4': 'oragne',
+            'S4': 'orange',
             'S5': '#fff2cc',
             'S6': '#f8cecc',
             'S7': '#d0e0e3',
