@@ -14,10 +14,26 @@ if path:
     print("Path found:", path)
     total_cost = sum(level3.cost_to_move() for i in range(len(path)-1))
     print(f"Total cost: {total_cost}")
+    
+    lef_padding = len(maze[0]) * 50 + 20
+    visualizer.canvas.create_text(lef_padding, 12, text='Level 3: fuel limitation', font=('Cascadia Code', 14, 'bold'), anchor='nw')
+    visualizer.canvas.create_text(lef_padding, 40, text='Modified A* with fuel limitation', font=('Cascadia Code', 14), anchor='nw')
+    visualizer.canvas.create_text(lef_padding, 68, text='Success. Total cost: ' + str(len(path) - 1), font=('Cascadia Code', 14), anchor='nw', fill='green')
+    visualizer.draw_screen()
+
+    visualizer.root.after(2500)
     for node in path:
         visualizer.update_current(node)
         visualizer.draw_screen()
         visualizer.root.after(200)
+        
     visualizer.root.mainloop()
 else:
+    lef_padding = len(maze[0]) * 50 + 20
+    visualizer.canvas.create_text(lef_padding, 12, text='Level 3: fuel limitation', font=('Cascadia Code', 14, 'bold'), anchor='nw')
+    visualizer.canvas.create_text(lef_padding, 40, text='Modified A* with fuel limitation', font=('Cascadia Code', 14), anchor='nw')
+    visualizer.canvas.create_text(lef_padding, 68, text='No path found :<', font=('Cascadia Code', 14), anchor='nw', fill='red')
+    visualizer.draw_screen()
+
     print("No path found within the given constraints.")
+    visualizer.root.mainloop()

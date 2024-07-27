@@ -99,7 +99,7 @@ class PathFinder(ABC):
         if result is not None:
             self.visualizer.canvas.create_text(lef_padding, 68, text=result[0], font=('Cascadia Code', 14), anchor='nw', fill=result[1])
         if more_text is not None:
-            self.visualizer.canvas.create_text(lef_padding, 100, text=result, font=('Cascadia Code', 14), anchor='nw')
+            self.visualizer.canvas.create_text(lef_padding, 100, text=more_text, font=('Cascadia Code', 14), anchor='nw')
         if current is not None:
             self.visualizer.update_current(current)
         self.visualizer.draw_screen()
