@@ -26,20 +26,20 @@ def main():
     visualizer.root.update()
     visualizer.root.after(400)
     #print("Running BFS...")
-    bfs_finder.visualizer.set_map(maze_grid)
-    #bfs_finder.start_visualizer(start, goal)
+    # bfs_finder.visualizer.set_map(maze_grid)
+    # bfs_finder.start_visualizer(start, goal)
 
-    #print("\nRunning DFS...")
-    #dfs_finder.start_visualizer(start, goal)
+    # print("\nRunning DFS...")
+    # dfs_finder.start_visualizer(start, goal)
 
-    print("\nRunning UCS...")
-    ucs_finder.start_visualizer(start, goal)
+    # print("\nRunning UCS...")
+    # ucs_finder.start_visualizer(start, goal)
 
-    print("\nRunning GBFS...")
-    gbfs_finder.start_visualizer(start, goal)
+    # print("\nRunning GBFS...")
+    # gbfs_finder.start_visualizer(start, goal)
 
-    print("\nRunning A*...")
-    a_star_finder.start_visualizer(start, goal)
+    # print("\nRunning A*...")
+    # a_star_finder.start_visualizer(start, goal)
 
     # Level 2 Test
     level2_finder = PathFinder.PathFinderLevel2(maze, visualizer)

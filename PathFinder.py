@@ -88,12 +88,15 @@ class PathFinder(ABC):
             print("No path found.")
         
 
-    def visualize_step(self, current: Tuple[int, int], headline = None):
+    def visualize_step(self, current: Tuple[int, int] = None, headline = None, lvl_name = None):
         self.visualizer.canvas.delete('all')
         self.visualizer.make_boxes()
+        if lvl_name is not None:
+            self.visualizer.canvas.create_text(520, 12, text=lvl_name, font=('Cascadia Code', 14, 'bold'), anchor='nw')
         if headline is not None:
-            self.visualizer.canvas.create_text(520, 12, text=headline, font=('Cascadia Code', 14), anchor='nw')
-        self.visualizer.update_current(current)
+            self.visualizer.canvas.create_text(520, 32, text=headline, font=('Cascadia Code', 14), anchor='nw')
+        if current is not None:
+            self.visualizer.update_current(current)
         self.visualizer.draw_screen()
         self.visualizer.root.after(80)
 
@@ -132,7 +135,7 @@ class BFSPathFinder(PathFinder):
             current, path = frontier.pop(0)
             print('Checking:', current)
             # self.visualizer.canvas.create_text(690, 12, text='Algorithm: Breadth first Search', font=('Cascadia Code', 14))
-            self.visualize_step(current, 'Breadth first Search')
+            self.visualize_step(current, 'Breadth first Search', 'Level 1')
             # self.visualizer.root.after(400)
 
             for next_node in self.get_neighbors(current, self.maze):
@@ -151,7 +154,7 @@ class DFSPathFinder(PathFinder):
         while stack:
             current, path = stack.pop()
             print('Checking: ', current)
-            self.visualize_step(current, 'Depth-first Search')
+            self.visualize_step(current, 'Depth-first Search', 'Level 1')
 
             for next in self.get_neighbors(current, self.maze):
                 if next not in path:
@@ -171,7 +174,7 @@ class UCSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             print('Checking: ', current)
-            self.visualize_step(current, 'Uniform-cost Search')
+            self.visualize_step(current, 'Uniform-cost Search', 'Level 1')
 
             if current == goal:
                 return self.reconstruct_path(came_from, start, goal)
@@ -203,7 +206,7 @@ class GBFSPathFinder(PathFinder):
         while not frontier.empty():
             current = frontier.get()
             print('Checking: ', current)
-            self.visualize_step(current, 'Greedy best first Search')
+            self.visualize_step(current, 'Greedy best first Search', 'Level 1')
             
             if current == goal:
                 return self.reconstruct_path(came_from, start, goal)
@@ -225,7 +228,7 @@ class AStarPathFinder(PathFinder):
         while not frontier.empty():
             path_cost, current, path = frontier.get()
             path = path + [current]
-            self.visualize_step(current, 'A*')
+            self.visualize_step(current, 'A* Search', 'Level 1')
             
             if current == goal:
                 return path  
@@ -251,8 +254,9 @@ class PathFinderLevel2(PathFinder):
         reached = {}  # Dictionary to store the states with start position, time
         reached[(start, 0)] = 0  # The value of the key is the path cost of that state(positions, time)
         
-        self.visualizer.make_boxes()
-        self.visualizer.draw_screen()
+        # self.visualizer.make_boxes()
+        # self.visualizer.draw_screen()
+        self.visualize_step(headline='A* Search', lvl_name='Level 2')
         
         while not frontier.empty():
             path_cost, current_time, current, path = frontier.get()
