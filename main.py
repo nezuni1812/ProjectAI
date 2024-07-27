@@ -4,7 +4,7 @@ import ReadInput
 import tkinter as tk
 
 def main():
-    file_path = 'input5_level1.txt'
+    file_path = 'input.txt'
     n, m, time_limit, fuel_capacity, maze_grid, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     start = starts[0]  # Starting point 'S'
@@ -27,20 +27,21 @@ def main():
     bfs_finder.visualizer.draw_screen()
     
     print("Running BFS...")
-    bfs_finder.start_visualizer(start, goal)
+    #bfs_finder.start_visualizer(start, goal)
+    visualizer.root.after(300)
     
     print("\nRunning DFS...")
     dfs_finder.start_visualizer(start, goal)
-    
+    bfs_finder.visualizer.root.mainloop()
     print("\nRunning UCS...")
     ucs_finder.start_visualizer(start, goal)
+
     print("\nRunning GBFS...")
     gbfs_finder.start_visualizer(start, goal)
-    
-    
+
     print("\nRunning A*...")
     a_star_finder.start_visualizer(start, goal)
-    bfs_finder.visualizer.root.mainloop()
+
 
     # Level 2 Test
     #level2_finder = PathFinder.PathFinderLevel2(maze, visualizer)
