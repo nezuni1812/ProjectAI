@@ -3,7 +3,7 @@ import level4
 import ReadInput
 
 if __name__ == '__main__':
-    file_path = 'input1_level4.txt'
+    file_path = 'input3_level4.txt'
     n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     agents = []
@@ -24,11 +24,14 @@ if __name__ == '__main__':
     
     visuals.set_map(raw_maze)
     
-    for i, point in enumerate(starts):
-        visuals.add_point(point, 'S' if i == 0 else 'S' + str(i))
+    print(raw_maze)
+    print(maze)
+    
+    # for i, point in enumerate(starts):
+    #     visuals.add_point(point, 'S' if i == 0 else 'S' + str(i))
         
-    for i, point in enumerate(goals):
-        visuals.add_point(point, 'G' if i == 0 else 'G' + str(i))
+    # for i, point in enumerate(goals):
+    #     visuals.add_point(point, 'G' if i == 0 else 'G' + str(i))
         
     visuals.make_boxes()
     

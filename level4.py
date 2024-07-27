@@ -318,42 +318,42 @@ def generate_new_position(maze):
     return random.choice(empty_squares)
 
 # Example usage
-# if __name__ == '__main__':
-#     maze = [
-#         [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-#         [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
-#         [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
-#         [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-#         [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
-#         [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-#         [0, 0, -2, 0, -1, 4, -1, 8, -1, 0],  # -2 represents a gas station F1
-#         [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-#         [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
-#         [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
-#     ]
+if __name__ == '__main__':
+    maze = [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
+        [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
+        [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
+        [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
+        [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
+        [0, 0, -2, 0, -1, 4, -1, 8, -1, 0],  # -2 represents a gas station F1
+        [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
+        [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
+        [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
+    ]
 
-#     agents = [
-#         Agent((1, 1), (7, 8), 10, time_limit=20, is_main=True, name="S"),
-#         Agent((8, 5), (4, 6), 10, time_limit=20, name="S1"),
-#         Agent((2, 5), (9, 0), 10, time_limit=10, name="S2"),
-#     ]
+    agents = [
+        Agent((1, 1), (7, 8), 10, time_limit=20, is_main=True, name="S"),
+        Agent((8, 5), (4, 6), 10, time_limit=20, name="S1"),
+        Agent((2, 5), (9, 0), 10, time_limit=10, name="S2"),
+    ]
 
-#     fuel_capacity = 10
+    fuel_capacity = 10
 
-#     # Find the path using WHCA*
-#     path = whca_star(agents, maze, fuel_capacity)
-#     final_path = get_agent_stop(path, agents, maze)
+    # Find the path using WHCA*
+    path = whca_star(agents, maze, fuel_capacity)
+    final_path = get_agent_stop(path, agents, maze)
 
-#     if path:
-#         print("Paths found:")
-#         print(path)
-#         # for agent in agents:
-#         #     agent_path = [step for step in path if step[0] == agent.name]
-#         #     total_time = calculate_path_time(agent_path, maze)
-#         #     print(f"Agent {agent.name}:")
-#         #     print(f"  Path: {agent_path}")
-#         #     print(f"  Total time: {total_time}")
-#         #     print(f"  Within time limit: {'Yes' if total_time <= agent.time_limit else 'No'}")
+    if path:
+        print("Paths found:")
+        print(path)
+        # for agent in agents:
+        #     agent_path = [step for step in path if step[0] == agent.name]
+        #     total_time = calculate_path_time(agent_path, maze)
+        #     print(f"Agent {agent.name}:")
+        #     print(f"  Path: {agent_path}")
+        #     print(f"  Total time: {total_time}")
+        #     print(f"  Within time limit: {'Yes' if total_time <= agent.time_limit else 'No'}")
 
-#     else:
-#         print("No path found for at least one agent.")
+    else:
+        print("No path found for at least one agent.")
