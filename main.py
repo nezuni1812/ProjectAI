@@ -20,9 +20,6 @@ def main():
     gbfs_finder = PathFinder.GBFSPathFinder(maze, visualizer)
     a_star_finder = PathFinder.AStarPathFinder(maze, visualizer)
 
-    # txt = visualizer.root.create_text(690, 120, text='Algorithm:', font=('Cascadia Code', 14))
-    # txt = tk.Text(visualizer.root, 690, 120, text='Algorithm:', font=('Cascadia Code', 14))
-    # l = tk.Label(visualizer.root, text = "Fact of the Day")
     visualizer.root.update()
     visualizer.root.after(400)
     bfs_finder.visualizer.set_map(maze_grid)
@@ -50,8 +47,8 @@ def main():
     #level2_finder.set_time_limit(time_limit)
     #level2_finder.visualizer.set_map(maze_grid)
     
-    #print("\nRunning A*_Level 2...")
-    #level2_finder.start_visualizer(start, goal)
+    print("\nRunning A*_Level 2...")
+    level2_finder.start_visualizer(start, goal)
     # Make the screen stay alive
     #level2_finder.visualizer.root.mainloop()
 

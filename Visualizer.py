@@ -176,9 +176,11 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 self.canvas.delete(outline)
                 continue
             
+            # Pause the screen waiting for user input for next move
             while not self.move:
                 self.root.update()
                 
+            # Remove outline and text in preparation for next move
             if current_cell_txt is not None:
                 self.canvas.delete(current_cell_txt)
             self.canvas.delete(outline)
