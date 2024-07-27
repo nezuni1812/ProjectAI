@@ -25,7 +25,7 @@ class Agent:
         self.name = name
 
 def whca_star(agents, maze, fuel_capacity, window_size=5):
-    start_state = (tuple((agent.start[0], agent.start[1], agent.fuel, 0) for agent in agents),)
+    start_state = tuple((agent.start[0], agent.start[1], agent.fuel, 0) for agent in agents)
 
     # Initialize reservation table
     reservation_table = {}
@@ -186,6 +186,7 @@ def calculate_path_time(path, maze):
             total_time += toll_booth_wait_time(next_pos, maze)
     return total_time
 
+
 def get_agent_stop(path, agents, maze):
     updated_path = []
     stopped_agents = set()
@@ -208,41 +209,6 @@ def get_agent_stop(path, agents, maze):
                 updated_path.append(step)
         
     return updated_path
-
-# def generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity):
-#     result_path = []
-#     for step in path:
-#         result_path.append(step)
-#         agent_name, old_position, current_position, action = step
-
-#         if len(agent_name) > 1:
-#             index_agent = int(agent_name[1:])
-#             agents[index_agent].start = current_position
-#         else:
-#             agents[0].start = current_position
-
-#         if agent_name == 'S' and current_position == agents[0].goal:
-#             print("Main agent S has reached the goal.")
-#             return result_path
-
-#         if agent_name != 'S' and current_position == agents[index_agent].goal:
-#             print(f"Sub-agent {agent_name} has reached the goal.")
-#             new_position = generate_new_position(maze)
-#             if new_position:
-#                 agents[index_agent].start = current_position
-#                 agents[index_agent].goal = new_position
-
-#                 print(new_position)
-#                 path = whca_star(agents, maze, fuel_capacity)
-#                 if path is None:
-#                     print("No path found for at least one agent.")
-#                     return result_path
-#                 else:
-#                     result_path.extend(path)
-#                     break
-#             return result_path 
-        
-#     return result_path
 
 def generate_new_subagent_and_recreate_path(path, agents, maze, fuel_capacity):
     result_path = []
@@ -316,44 +282,3 @@ def generate_new_position(maze):
         return None
     
     return random.choice(empty_squares)
-
-# Example usage
-if __name__ == '__main__':
-    maze = [
-        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
-        [0, 0, -1, -1, -1, 0, 0, -1, 0, -1],
-        [0, 0, 0, 0, -1, 0, 0, -1, 0, 0],
-        [0, 0, -1, -1, -1, 0, 0, -1, -1, 0],
-        [1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-        [0, 0, -2, 0, -1, 4, -1, 8, -1, 0],  # -2 represents a gas station F1
-        [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-        [0, -1, -1, -1, -1, 0, 0, 0, 0, 0],
-        [0, 0, 5, 0, 0, 0, -1, -1, -1, 0]
-    ]
-
-    agents = [
-        Agent((1, 1), (7, 8), 10, time_limit=20, is_main=True, name="S"),
-        Agent((8, 5), (4, 6), 10, time_limit=20, name="S1"),
-        Agent((2, 5), (9, 0), 10, time_limit=10, name="S2"),
-    ]
-
-    fuel_capacity = 10
-
-    # Find the path using WHCA*
-    path = whca_star(agents, maze, fuel_capacity)
-    final_path = get_agent_stop(path, agents, maze)
-
-    if path:
-        print("Paths found:")
-        print(path)
-        # for agent in agents:
-        #     agent_path = [step for step in path if step[0] == agent.name]
-        #     total_time = calculate_path_time(agent_path, maze)
-        #     print(f"Agent {agent.name}:")
-        #     print(f"  Path: {agent_path}")
-        #     print(f"  Total time: {total_time}")
-        #     print(f"  Within time limit: {'Yes' if total_time <= agent.time_limit else 'No'}")
-
-    else:
-        print("No path found for at least one agent.")
