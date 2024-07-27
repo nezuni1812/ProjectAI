@@ -109,8 +109,9 @@ class Visualizer:
         }
         
         lef_padding = len(self.maze[0]) * 50 + 20
-        txt = self.canvas.create_text(lef_padding, 50, text='Step', font=('Cascadia Code', 14), anchor='nw')
-        self.canvas.create_text(lef_padding, 120, text='<Arrow right> for next move\n<Enter> for autoplay', font=('Cascadia Code', 14), anchor='nw')
+        self.canvas.create_text(lef_padding, 12, text='Level 4: Multi agents', font=('Cascadia Code', 14, 'bold'), anchor='nw')
+        txt = self.canvas.create_text(lef_padding, 40, text='Step', font=('Cascadia Code', 14), anchor='nw')
+        self.canvas.create_text(lef_padding, 120, text='<Arrow ▶> for next move\n<Enter ⏎> for autoplay', font=('Cascadia Code', 14), anchor='nw')
         
         self.move = True
         self.autoplay = False
@@ -172,7 +173,7 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 
             # Auto play feature
             if self.autoplay:
-                self.root.after(200)
+                self.root.after(0)
                 if current_cell_txt is not None:
                     self.canvas.delete(current_cell_txt)
                 self.canvas.delete(outline)
@@ -185,7 +186,7 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 self.canvas.delete(current_cell_txt)
             self.canvas.delete(outline)
             
-        self.canvas.create_text(lef_padding, 32, text='Main agent has reached the goal', font=('Cascadia Code', 14), anchor='nw', fill='green')
+        self.canvas.create_text(lef_padding, 180, text='Main agent has reached the goal', font=('Cascadia Code', 14), anchor='nw', fill='green')
         
     
     def add_point(self, start, txt):
