@@ -4,7 +4,7 @@ import ReadInput
 import tkinter as tk
 
 def main():
-    file_path = 'input_level1.txt'
+    file_path = 'input.txt'
     n, m, time_limit, fuel_capacity, maze_grid, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     start = starts[0]  # Starting point 'S'
@@ -25,31 +25,35 @@ def main():
     # l = tk.Label(visualizer.root, text = "Fact of the Day")
     visualizer.root.update()
     visualizer.root.after(400)
-    # print("Running BFS...")
-    # bfs_finder.visualizer.set_map(maze_grid)
-    # bfs_finder.start_visualizer(start, goal)
+    bfs_finder.visualizer.set_map(maze_grid)
+    bfs_finder.visualizer.make_boxes()
+    bfs_finder.visualizer.draw_screen()
+    
+    print("Running BFS...")
+    #bfs_finder.start_visualizer(start, goal)
+    
+    print("\nRunning DFS...")
+    dfs_finder.start_visualizer(start, goal)
+    bfs_finder.visualizer.root.mainloop()
+    print("\nRunning UCS...")
+    ucs_finder.start_visualizer(start, goal)
 
-    # print("\nRunning DFS...")
-    # dfs_finder.start_visualizer(start, goal)
+    print("\nRunning GBFS...")
+    gbfs_finder.start_visualizer(start, goal)
 
-    # print("\nRunning UCS...")
-    # ucs_finder.start_visualizer(start, goal)
+    print("\nRunning A*...")
+    a_star_finder.start_visualizer(start, goal)
 
-    # print("\nRunning GBFS...")
-    # gbfs_finder.start_visualizer(start, goal)
-
-    # print("\nRunning A*...")
-    # a_star_finder.start_visualizer(start, goal)
 
     # Level 2 Test
-    level2_finder = PathFinder.PathFinderLevel2(maze, visualizer)
-    level2_finder.set_time_limit(time_limit)
-    level2_finder.visualizer.set_map(maze_grid)
+    #level2_finder = PathFinder.PathFinderLevel2(maze, visualizer)
+    #level2_finder.set_time_limit(time_limit)
+    #level2_finder.visualizer.set_map(maze_grid)
     
-    print("\nRunning A*_Level 2...")
-    level2_finder.start_visualizer(start, goal)
+    #print("\nRunning A*_Level 2...")
+    #level2_finder.start_visualizer(start, goal)
     # Make the screen stay alive
-    level2_finder.visualizer.root.mainloop()
+    #level2_finder.visualizer.root.mainloop()
 
 if __name__ == "__main__":
     main()
