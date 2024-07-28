@@ -6,9 +6,6 @@ def level_4(visuals, file_path):
     n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
 
     visuals.canvas.delete('all')
-    visuals.root.unbind('<Return')
-    visuals.root.bind("<Return>", lambda *args: level_4(visuals, file_path))
-
 
     agents = []
     for i, (start, goal) in enumerate(zip(starts, goals)):

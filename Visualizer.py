@@ -13,9 +13,6 @@ windll.shcore.SetProcessDpiAwareness(1)
 pyglet.font.add_file('CascadiaCode.ttf')
 
 
-def start_reloader():
-    reloader = hupper.start_reloader('mian.main')
-
 move = True
 
 class Visualizer:
@@ -38,8 +35,10 @@ class Visualizer:
         }
         
         self.root = Tk()
-        self.root.geometry('1040x760')
-        self.root.configure(background='#696969')
+        # self.root.geometry('1040x760')
+        # self.root.configure(background='#696969')
+        self.root.title("Project 1 - Searching")
+        self.root.geometry("1040x760+-4+100")
         
         self.canvas = Canvas()
         self.canvas.pack(fill='both', expand=True)
@@ -137,7 +136,7 @@ From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
                 curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.6)
             else:
                 curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.65)
-            outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline=colrs[step[0]], width=3)
+            outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline='white', width=3)
                 
             # Create text on current cell
             current_cell_txt = None

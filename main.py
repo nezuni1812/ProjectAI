@@ -2,6 +2,7 @@ import PathFinder
 import Visualizer
 import ReadInput
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image, ImageTk
 
 import testingLvl3
@@ -28,6 +29,11 @@ def level_1(visualizer, file_path):
         print(index)
         foo = function_list[index]
         foo()
+        
+    for ele in visualizer.root.winfo_children():
+        if not isinstance(ele, tk.Canvas):
+            ele.destroy()
+    visualizer.canvas.pack(fill='both', expand=True)
         
     # Add key binds
     visualizer.root.unbind('<Return')
@@ -75,6 +81,11 @@ def level_1(visualizer, file_path):
 def level_2(visualizer, file_path):
     n, m, time_limit, fuel_capacity, maze_grid, maze, starts, goals = ReadInput.read_input_file(file_path)
     
+    for ele in visualizer.root.winfo_children():
+        if not isinstance(ele, tk.Canvas):
+            ele.destroy()
+    visualizer.canvas.pack(fill='both', expand=True)
+    
     visualizer.root.unbind('<Return')
     visualizer.root.bind("<Return>", lambda *args: level_2(visualizer, file_path))
     
@@ -85,22 +96,51 @@ def level_2(visualizer, file_path):
     level2_finder = PathFinder.PathFinderLevel2(maze, visualizer)
     level2_finder.set_time_limit(time_limit)
     level2_finder.visualizer.set_map(maze_grid)
-    # visualizer.root.after(1200)
     
     print("\nRunning A*_Level 2...")
     level2_finder.start_visualizer(start, goal)
     # Make the screen stay alive
     # level2_finder.visualizer.root.mainloop()
 
+def level_4(visualizer, file_path):
+    for ele in visualizer.root.winfo_children():
+        if not isinstance(ele, tk.Canvas):
+            ele.destroy()
+    visualizer.canvas.pack_forget()
+
+    def chose_file():
+        visualizer.canvas.pack(fill='both', expand=True)
+        visualizer.root.unbind('<Return')
+        visualizer.root.bind("<Return>", lambda *args: level_4(visualizer, file_path))
+        drop.destroy()
+        button.destroy()
+        testingLvl4.level_4(visualizer, clicked.get())
+        print('File:', clicked.get())
+        
+    options = [ 
+        "input1_level4.txt", 
+        "input2_level4.txt", 
+        "input3_level4.txt", 
+        "input4_level4.txt",
+        "input5_level4.txt", 
+    ] 
+    clicked = tk.StringVar()
+    clicked.set("input1_level4.txt") 
+    drop = ttk.OptionMenu(visualizer.root , clicked , *options ) 
+    drop.pack()
+    button = ttk.Button(visualizer.root , text="Run this file for Level 4" , command=chose_file)
+    button.pack()
+    
+
 level_list = []
 level_index = 0
 if __name__ == "__main__":
     visualizer = Visualizer.Visualizer()
     
-    level_list.append(lambda *args: level_1(visualizer, 'input2_level1.txt'))
-    level_list.append(lambda *args: level_2(visualizer, 'input2_level2.txt'))
-    level_list.append(lambda *args: testingLvl3.level_3(visualizer, 'input3_level3.txt'))
-    level_list.append(lambda *args: testingLvl4.level_4(visualizer, 'input4_level4.txt'))
+    level_list.append(lambda *args: level_1(visualizer, 'input5_level1.txt'))
+    level_list.append(lambda *args: level_2(visualizer, 'input5_level2.txt'))
+    level_list.append(lambda *args: testingLvl3.level_3(visualizer, 'input5_level3.txt'))
+    level_list.append(lambda *args: level_4(visualizer, 'input1_level4.txt'))
     
     def change_level(new_level = None):
         global level_index
@@ -112,7 +152,7 @@ if __name__ == "__main__":
         foo()
         
     visualizer.canvas.create_text(10, 12, text='Using number key 1, 2, 3, 4 to change level', font=('Cascadia Code', 14), anchor='nw')
-    img= ImageTk.PhotoImage(Image.open("images/welcome.png").resize((1000, 680)))
+    img= ImageTk.PhotoImage(Image.open("images/welcome.png").resize((1100, 680)))
     visualizer.canvas.create_image(0, 30, image=img, anchor='nw')
         
     visualizer.root.bind("<Key-1>", lambda *args: change_level(0))

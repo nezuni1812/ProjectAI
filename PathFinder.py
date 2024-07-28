@@ -82,7 +82,7 @@ class PathFinder(ABC):
             for node in path:
                 self.visualizer.update_current(node)
                 self.visualizer.draw_screen()
-                time.sleep(.1)
+                self.visualizer.root.after(10)
         
         else:
             print("No path found.")
@@ -103,7 +103,7 @@ class PathFinder(ABC):
         if current is not None:
             self.visualizer.update_current(current)
         self.visualizer.draw_screen()
-        self.visualizer.root.after(50)
+        self.visualizer.root.after(10)
 
     # Functions for level 2: Time limitation
     @staticmethod
@@ -293,7 +293,9 @@ class PathFinderLevel2(PathFinder):
             # print('Check:', current)
             
             if current == goal:
-                return path  
+                print('Total time:', current_time)
+                self.visualize_step(headline='A* Search with time limit of ' + str(self.time_limit), lvl_name='Level 2: Time limitation', result=('Success. Total time: ' + str(current_time), 'green'))
+                return path 
             
             for next in self.get_neighbors(current, self.maze):
                 new_cost = path_cost + self.cost_to_move()
