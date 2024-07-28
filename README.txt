@@ -17,6 +17,31 @@ All of our code are written in Python so a system with a relatively modern versi
 pip install -r requirements.txt
 ```
 ## Running the UI
+The working director MUST be the one contains all input files, font file and image folder.
+```bash
+cd Source
+```
+So our working directory will have:
+```
+Source
+│   main.py
+│   CascadiaCode.ttf
+│   input1_level1.txt
+│   ...
+│   input6_level4.txt
+│   level3.py
+│   level4.py
+│   level_3_ui_implementation.py
+│   level_4_ui_implementation.py
+│   PathFinder.py
+│   README.txt
+│   requirements.txt
+│   Visualizer.py
+│   ...
+│   
+└───images
+        welcome.png
+```
 ```bash
 python main.py
 ```
