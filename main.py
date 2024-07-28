@@ -123,6 +123,7 @@ def level_4(visualizer, file_path):
         "input3_level4.txt", 
         "input4_level4.txt",
         "input5_level4.txt", 
+        "input6_level4.txt" 
     ] 
     clicked = tk.StringVar()
     clicked.set("input1_level4.txt") 

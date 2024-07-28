@@ -25,22 +25,8 @@ def level_4(visuals, file_path):
         print("No path found for at least one agent.")
         path = None
 
-    # visuals =  Visualizer.Visualizer()
     visuals.set_map(raw_maze)
-    
-    print(raw_maze)
-    print(maze)
-    
-    # for i, point in enumerate(starts):
-    #     visuals.add_point(point, 'S' if i == 0 else 'S' + str(i))
-        
-    # for i, point in enumerate(goals):
-    #     visuals.add_point(point, 'G' if i == 0 else 'G' + str(i))
-        
     visuals.make_boxes()
-    
-    # print(visuals.maze)
-    # visuals.root.mainloop()
     
     if path:
         print("Paths found:")
@@ -53,13 +39,14 @@ def level_4(visuals, file_path):
             print(f"  Total time: {total_time}")
             print(f"  Within time limit: {'Yes' if total_time <= agent.time_limit else 'No'}")
 
-        # Plot the maze and paths
-        # level4.plot_maze(maze, path, agents)
         visuals.draw_path_turn_based(path)
-        
-        # Make the screen stay alive
-        # visuals.root.mainloop()
     else:
+        lef_padding = len(maze[0]) * 50 + 20
+        visuals.canvas.create_text(lef_padding, 12, text='Level 4: Multi agents', font=('Cascadia Code', 14, 'bold'), anchor='nw')
+        visuals.canvas.create_text(lef_padding, 40, text='Step', font=('Cascadia Code', 14), anchor='nw')
+        visuals.canvas.create_text(lef_padding, 120, text='<Arrow ▶> for next move\n<Space ␣> for autoplay', font=('Cascadia Code', 14), anchor='nw')
+
+        visuals.canvas.create_text(lef_padding, 180, text='No path found :<', font=('Cascadia Code', 14), anchor='nw', fill='red')
         print("No path found for at least one agent.")
         
 if __name__ == '__main__':

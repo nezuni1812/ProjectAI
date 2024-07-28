@@ -16,9 +16,8 @@ python main.py
 ```
 A Tkinter window will pop up and show the welcome screen, noticing the user that they can choose which level to run using the number keys. More information are available inside each level.
 
-When a level is has completed, the user can switch to another level by pressing the number key corresponding to the level index, i.e. `1`, `2`, `3` or `4`.
+When a level is has completed, the user can switch to another level by pressing the number key corresponding to the level index, i.e. `1`, `2`, `3` or `4`. To restart a level, the user can press the `enter` key.
 
-To restart a level, the user can press the `enter` key.
 
 # Changing level's inputs
 Each level has 5 test cases, or inputs. Their file names are: 
@@ -39,6 +38,7 @@ User can directly edit the input file name in the `main.py` file by their level.
 
 ## Level 4
 For level 4, user can change the input by clicking the dropdown and choosing which file to take data from.
+
 
 # Class diagram
 The `PathFinder.py` and `Visualizer.py` contains our classes for the project.
