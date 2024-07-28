@@ -9,7 +9,7 @@ class PriorityQueue:
     def empty(self):
         return len(self.elements) == 0
 
-    def put(self, item, priority):
+    def put(self, priority, item):
         heapq.heappush(self.elements, (priority, item))
 
     def get(self):
@@ -32,7 +32,7 @@ def whca_star(agents, maze, fuel_capacity, window_size=5):
 
     paths = []
     for i, agent in enumerate(agents):
-        path = single_agent_whca(agent, i, maze, fuel_capacity, window_size, reservation_table)
+        path = single_agent_whca(agent, i, agent.time_limit, fuel_capacity, maze, window_size, reservation_table) # agent, agent_index, time_limit, fuel_capacity, maze, window_size, reservation_table
         if path is None:
             print(f"No path found for agent {agent.name}")
             return None
@@ -47,69 +47,69 @@ def whca_star(agents, maze, fuel_capacity, window_size=5):
 
     return merge_paths(paths)
 
-def single_agent_whca(agent, agent_index, maze, fuel_capacity, window_size, reservation_table):
-    start_state = (agent.start[0], agent.start[1], agent.fuel, 0)
-    frontier = PriorityQueue()
-    frontier.put(start_state, 0)
-    came_from = {start_state: None}
-    cost_so_far = {start_state: 0}
+# def single_agent_whca(agent, agent_index, maze, fuel_capacity, window_size, reservation_table):
+#     start_state = (agent.start[0], agent.start[1], agent.fuel, 0)
+#     frontier = PriorityQueue()
+#     frontier.put(start_state, 0)
+#     came_from = {start_state: None}
+#     cost_so_far = {start_state: 0}
 
-    best_path = None
-    best_cost = float('inf')
-    suboptimal_path = None
-    suboptimal_cost = float('inf')
+#     best_path = None
+#     best_cost = float('inf')
+#     suboptimal_path = None
+#     suboptimal_cost = float('inf')
 
-    while not frontier.empty():
-        current_state = frontier.get()
+#     while not frontier.empty():
+#         current_state = frontier.get()
 
-        if current_state[:2] == agent.goal:
-            path = reconstruct_single_path(came_from, start_state, current_state, agent, maze)
-            if cost_so_far[current_state] <= agent.time_limit:
-                if cost_so_far[current_state] < suboptimal_cost:
-                    suboptimal_path = path
-                    suboptimal_cost = cost_so_far[current_state]
-                if cost_so_far[current_state] < best_cost:
-                    best_path = path
-                    best_cost = cost_so_far[current_state]
-            elif cost_so_far[current_state] < best_cost:
-                best_path = path
-                best_cost = cost_so_far[current_state]
+#         if current_state[:2] == agent.goal:
+#             path = reconstruct_single_path(came_from, start_state, current_state, agent, maze)
+#             if cost_so_far[current_state] <= agent.time_limit:
+#                 if cost_so_far[current_state] < suboptimal_cost:
+#                     suboptimal_path = path
+#                     suboptimal_cost = cost_so_far[current_state]
+#                 if cost_so_far[current_state] < best_cost:
+#                     best_path = path
+#                     best_cost = cost_so_far[current_state]
+#             elif cost_so_far[current_state] < best_cost:
+#                 best_path = path
+#                 best_cost = cost_so_far[current_state]
 
-        for next_state in get_single_agent_next_states(current_state, agent, maze, fuel_capacity, reservation_table):
-            new_cost = cost_so_far[current_state] + 1
-            if is_toll_booth(next_state[:2], maze):
-                new_cost += toll_booth_wait_time(next_state[:2], maze)
-            if is_gas_station(next_state[:2], maze):
-                new_cost += refuel_time(next_state[:2], maze)
+#         for next_state in get_single_agent_next_states(current_state, agent, maze, fuel_capacity, reservation_table):
+#             new_cost = cost_so_far[current_state] + 1
+#             if is_toll_booth(next_state[:2], maze):
+#                 new_cost += toll_booth_wait_time(next_state[:2], maze)
+#             if is_gas_station(next_state[:2], maze):
+#                 new_cost += refuel_time(next_state[:2], maze)
 
-            if new_cost < best_cost and (next_state not in cost_so_far or new_cost < cost_so_far[next_state]):
-                cost_so_far[next_state] = new_cost
-                priority = new_cost + manhattan_distance(next_state[:2], agent.goal)
-                frontier.put(next_state, priority)
-                came_from[next_state] = current_state
+#             if new_cost < best_cost and (next_state not in cost_so_far or new_cost < cost_so_far[next_state]):
+#                 cost_so_far[next_state] = new_cost
+#                 priority = new_cost + manhattan_distance(next_state[:2], agent.goal)
+#                 frontier.put(next_state, priority)
+#                 came_from[next_state] = current_state
 
-                # Update reservation table for the window
-                if new_cost < window_size:
-                    if new_cost not in reservation_table:
-                        reservation_table[new_cost] = set()
-                    reservation_table[new_cost].add(next_state[:2])
+#                 # Update reservation table for the window
+#                 if new_cost < window_size:
+#                     if new_cost not in reservation_table:
+#                         reservation_table[new_cost] = set()
+#                     reservation_table[new_cost].add(next_state[:2])
 
-    return suboptimal_path if suboptimal_path else best_path
+#     return suboptimal_path if suboptimal_path else best_path
 
-def single_agent_whca2(agent, agent_index, time_limit, fuel_capacity, maze, window_size, reservation_table):
+def single_agent_whca(agent, agent_index, time_limit, fuel_capacity, maze, window_size, reservation_table):
     start_state = (0, 0, fuel_capacity, agent.start, []) # path_cost, current_time, current_fuel, current, path
     frontier = PriorityQueue()
-    frontier.put(0 + heuristic(agent.start, agent.goal), start_state)
+    frontier.put(0 + heuristic(agent.start, agent.goal), (0, 0, fuel_capacity, agent.start, []))
     
     reached = {}  # Dictionary to store the states with path cost, time, and fuel
     reached[(agent.start, 0, fuel_capacity)] = 0  # Store the initial state
 
-    came_from = {start_state: None}
+    # came_from = {start_state: None}
 
-    best_path = None
-    best_cost = float('inf')
-    suboptimal_path = None
-    suboptimal_cost = float('inf')
+    # best_path = None
+    # best_cost = float('inf')
+    # suboptimal_path = None
+    # suboptimal_cost = float('inf')
 
     while not frontier.empty():
         path_cost, current_time, current_fuel, current, path = frontier.get()
@@ -129,40 +129,55 @@ def single_agent_whca2(agent, agent_index, time_limit, fuel_capacity, maze, wind
             #     best_cost = reached[current_state]
             return path
 
-        for next_state, new_fuel, action in get_single_agent_next_states(current_state, agent, maze, fuel_capacity, reservation_table):
-            new_cost = path_cost + 1
-            new_time = current_time + time_to_move(next_state, action, maze)
-            if action == "move":
-                new_fuel = current_fuel - 1
-            elif action == "refuel":
-                new_fuel = fuel_capacity
-                
-            state = (next_state, new_time, new_fuel)
+        for new_path_cost, new_time, new_fuel, next, new_path, action in get_single_agent_next_states(current_state, agent, maze, fuel_capacity, reservation_table):
+            state = (next, new_fuel, new_time) # (new_path_cost, time + 1, new_fuel, (nx, ny), new_path, 'move')
             if new_time <= time_limit and new_fuel >= 0:
-                if state not in reached or new_cost < reached[state]:
-                    reached[state] = new_cost
-                    priority = new_cost + heuristic(next_state, goal)
-                    frontier.put(priority, (new_cost, new_time, new_fuel, next_state, path))
-
+                if state not in reached or new_path_cost < reached[state]:
+                    reached[state] = new_path_cost
+                    priority = new_path_cost + heuristic(next, agent.goal)
+                    frontier.put(priority, (new_path_cost, new_time, new_fuel, next, path))
     return None  # No path found within time limit
 
 def get_single_agent_next_states(state, agent, maze, fuel_capacity, reservation_table):
-    path_cost, time, fuel, current, path = state
+    path_cost, time, fuel, current, path, action = state
     (x, y) = current
     next_states = []
+
+    # Check if the agent is currently at a toll booth or refueling
+    if action == 'toll':
+        wait_time = toll_booth_wait_time((x, y), maze)
+        time_spent = time - max([t for t, pos in enumerate(path) if pos != (x, y)] + [0])
+        if time_spent < wait_time:
+            # Agent needs to continue waiting at the toll booth
+            next_states.append((path_cost, time + 1, fuel, (x, y), path + [(x, y)], 'toll'))
+            return next_states
+    elif action == 'refuel':
+        refuel_time_cost = refuel_time((x, y), maze)
+        time_spent = time - max([t for t, pos in enumerate(path) if pos != (x, y)] + [0])
+        if time_spent < refuel_time_cost:
+            # Agent needs to continue refueling
+            next_states.append((path_cost, time + 1, fuel_capacity, (x, y), path + [(x, y)], 'refuel'))
+            return next_states
 
     for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0), (0, 0)]:  # (0, 0) represents waiting
         nx, ny = x + dx, y + dy
         if is_valid_move(nx, ny, maze) and not is_reserved(nx, ny, time + 1, reservation_table):
-            if (dx, dy) == (0, 0):
-                next_states.append((nx, ny, fuel, time + 1, maze, 'wait'))
             new_fuel = fuel - 1 if (dx, dy) != (0, 0) else fuel  # No fuel consumption when waiting
             if new_fuel >= 0:
-                if is_gas_station((nx, ny), maze):
-                    next_states.append((nx, ny, fuel_capacity, time + refuel_time(next, maze), maze, 'refuel'))
+                new_path_cost = path_cost + 1 if (dx, dy) != (0, 0) else path_cost  # Increase path_cost only if moving
+                new_path = path + [(nx, ny)]
+                
+                if (dx, dy) == (0, 0):
+                    next_states.append((new_path_cost, time + 1, new_fuel, (nx, ny), new_path, 'wait'))
+                elif is_gas_station((nx, ny), maze):
+                    next_states.append((new_path_cost, time + 1, new_fuel, (nx, ny), new_path, 'refuel'))
+                elif is_toll_booth((nx, ny), maze):
+                    next_states.append((new_path_cost, time + 1, new_fuel, (nx, ny), new_path, 'toll'))
                 else:
-                    next_states.append((nx, ny, new_fuel, time + 1, 'move'))
+                    next_states.append((new_path_cost, time + 1, new_fuel, (nx, ny), new_path, 'move'))
+
     return next_states
+
 
 def time_to_move(next, action, maze):
     if action == 'move':
@@ -214,8 +229,6 @@ def merge_paths(paths):
 def is_valid_move(x, y, maze):
     return 0 <= x < len(maze) and 0 <= y < len(maze[0]) and maze[x][y] != -1
 
-def is_at_toll_booth(node, maze, time):
-    if()
 def is_toll_booth(node, maze):
     x, y = node
     return maze[x][y] > 1 and maze[x][y] < 10
