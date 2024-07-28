@@ -6,7 +6,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 import level_3_ui_implementation
-import level_4_UI_implementation
+import level_4_ui_implementation
 
 index = 0
 
@@ -114,7 +114,7 @@ def level_4(visualizer, file_path):
         visualizer.root.bind("<Return>", lambda *args: level_4(visualizer, file_path))
         drop.destroy()
         button.destroy()
-        level_4_UI_implementation.level_4(visualizer, clicked.get())
+        level_4_ui_implementation.level_4(visualizer, clicked.get())
         print('File:', clicked.get())
         
     options = [ 
