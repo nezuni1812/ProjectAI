@@ -52,7 +52,7 @@ def single_agent_whca(agent, agent_index, maze, fuel_capacity, window_size, rese
     frontier = PriorityQueue()
     frontier.put(start_state, 0)
     came_from = {start_state: None}
-    cost_so_far = {start_state: 0}
+    cost_so_far = {start_state: (0, 0, agent.fuel)}  # (cost, time, fuel)
 
     best_path = None
     best_cost = float('inf')
@@ -64,35 +64,44 @@ def single_agent_whca(agent, agent_index, maze, fuel_capacity, window_size, rese
 
         if current_state[:2] == agent.goal:
             path = reconstruct_single_path(came_from, start_state, current_state, agent, maze)
-            if cost_so_far[current_state] <= agent.time_limit:
-                if cost_so_far[current_state] < suboptimal_cost:
+            current_cost, current_time, _ = cost_so_far[current_state]
+            if current_time <= agent.time_limit:
+                if current_cost < suboptimal_cost:
                     suboptimal_path = path
-                    suboptimal_cost = cost_so_far[current_state]
-                if cost_so_far[current_state] < best_cost:
+                    suboptimal_cost = current_cost
+                if current_cost < best_cost:
                     best_path = path
-                    best_cost = cost_so_far[current_state]
-            elif cost_so_far[current_state] < best_cost:
+                    best_cost = current_cost
+            elif current_cost < best_cost:
                 best_path = path
-                best_cost = cost_so_far[current_state]
+                best_cost = current_cost
 
         for next_state in get_single_agent_next_states(current_state, agent, maze, fuel_capacity, reservation_table):
-            new_cost = cost_so_far[current_state] + 1
-            if is_toll_booth(next_state[:2], maze):
-                new_cost += toll_booth_wait_time(next_state[:2], maze)
-            if is_gas_station(next_state[:2], maze):
-                new_cost += refuel_time(next_state[:2], maze)
+            current_cost, current_time, current_fuel = cost_so_far[current_state]
+            new_cost = current_cost + 1
+            new_time = current_time + 1
+            new_fuel = next_state[2]  # Fuel is already updated in get_single_agent_next_states
 
-            if new_cost < best_cost and (next_state not in cost_so_far or new_cost < cost_so_far[next_state]):
-                cost_so_far[next_state] = new_cost
+            if is_toll_booth(next_state[:2], maze):
+                wait_time = toll_booth_wait_time(next_state[:2], maze)
+                new_cost += wait_time
+                new_time += wait_time
+            if is_gas_station(next_state[:2], maze):
+                refuel_duration = refuel_time(next_state[:2], maze)
+                new_cost += refuel_duration
+                new_time += refuel_duration
+
+            if new_cost < best_cost and (next_state not in cost_so_far or new_cost < cost_so_far[next_state][0]):
+                cost_so_far[next_state] = (new_cost, new_time, new_fuel)
                 priority = new_cost + manhattan_distance(next_state[:2], agent.goal)
                 frontier.put(next_state, priority)
                 came_from[next_state] = current_state
 
                 # Update reservation table for the window
-                if new_cost < window_size:
-                    if new_cost not in reservation_table:
-                        reservation_table[new_cost] = set()
-                    reservation_table[new_cost].add(next_state[:2])
+                if new_time < window_size:
+                    if new_time not in reservation_table:
+                        reservation_table[new_time] = set()
+                    reservation_table[new_time].add(next_state[:2])
 
     return suboptimal_path if suboptimal_path else best_path
 
