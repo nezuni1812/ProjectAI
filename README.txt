@@ -42,6 +42,7 @@ Source
 └───images
         welcome.png
 ```
+Then we run the program with Python.
 ```bash
 python main.py
 ```
