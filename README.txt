@@ -3,6 +3,8 @@ This repository contains our code for the group homework of the class Introducti
 
 The inputs, path search algorithms, the main UI code along with class diagrams of some of our custom classes are included.
 
+Source code: [GitHub](https://github.com/nezuni1812/Searching-Algorithms-for-Delivery-System)
+
 # Demo video
 [![Video](https://img.youtube.com/vi/o3kB2hNbsmE/maxresdefault.jpg)](https://youtu.be/o3kB2hNbsmE)
 
