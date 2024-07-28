@@ -2,9 +2,10 @@ import Visualizer
 import level4
 import ReadInput
 
-if __name__ == '__main__':
-    file_path = 'input4_level4.txt'
+def level_4(visuals, file_path):
     n, m, time_limit, fuel_capacity, raw_maze, maze, starts, goals = ReadInput.read_input_file(file_path)
+
+    visuals.canvas.delete('all')
 
     agents = []
     for i, (start, goal) in enumerate(zip(starts, goals)):
@@ -24,7 +25,7 @@ if __name__ == '__main__':
         print("No path found for at least one agent.")
         path = None
 
-    visuals =  Visualizer.Visualizer()
+    # visuals =  Visualizer.Visualizer()
     visuals.set_map(raw_maze)
     
     print(raw_maze)
@@ -57,6 +58,10 @@ if __name__ == '__main__':
         visuals.draw_path_turn_based(path)
         
         # Make the screen stay alive
-        visuals.root.mainloop()
+        # visuals.root.mainloop()
     else:
         print("No path found for at least one agent.")
+        
+if __name__ == '__main__':
+    visuals = Visualizer.Visualizer()
+    level_4(visuals, 'input2_level4.txt')

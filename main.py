@@ -2,6 +2,11 @@ import PathFinder
 import Visualizer
 import ReadInput
 import tkinter as tk
+from tkinter import ttk
+from PIL import Image, ImageTk
+
+import level_3_ui_implementation
+import level_4_UI_implementation
 
 index = 0
 
@@ -10,8 +15,6 @@ def level_1(visualizer, file_path):
 
     start = starts[0]  # Starting point 'S'
     goal = goals[0]  # Goal point 'G'
-    
-    # Level 1 Test 
     
     bfs_finder  = PathFinder.BFSPathFinder(maze, visualizer)
     dfs_finder  = PathFinder.DFSPathFinder(maze, visualizer)
@@ -27,6 +30,13 @@ def level_1(visualizer, file_path):
         foo = function_list[index]
         foo()
         
+    for ele in visualizer.root.winfo_children():
+        if not isinstance(ele, tk.Canvas):
+            ele.destroy()
+    visualizer.canvas.pack(fill='both', expand=True)
+        
+    # Add key binds
+    visualizer.root.unbind('<Return')
     visualizer.root.bind("<Return>", lambda *args: next_move())
     visualizer.root.bind("<Right>", lambda *args: next_move(1))
     visualizer.root.bind("<Left>", lambda *args: next_move(-1))
@@ -36,6 +46,7 @@ def level_1(visualizer, file_path):
     bfs_finder.visualizer.set_map(maze_grid)
     bfs_finder.visualizer.make_boxes()
     bfs_finder.visualizer.draw_screen()
+    # Instruction
     lef_padding = len(maze[0]) * 50 + 20
     visualizer.canvas.create_text(lef_padding, 12, text='Level 1: Basic', font=('Cascadia Code', 14, 'bold'), anchor='nw')
     visualizer.canvas.create_text(lef_padding, 100, text='<Arrow ◀ ▶> to change algorithm\n<Enter ⏎> to start the algorithm', font=('Cascadia Code', 14), anchor='nw')
@@ -70,6 +81,14 @@ def level_1(visualizer, file_path):
 def level_2(visualizer, file_path):
     n, m, time_limit, fuel_capacity, maze_grid, maze, starts, goals = ReadInput.read_input_file(file_path)
     
+    for ele in visualizer.root.winfo_children():
+        if not isinstance(ele, tk.Canvas):
+            ele.destroy()
+    visualizer.canvas.pack(fill='both', expand=True)
+    
+    visualizer.root.unbind('<Return')
+    visualizer.root.bind("<Return>", lambda *args: level_2(visualizer, file_path))
+    
     start = starts[0]  # Starting point 'S'
     goal = goals[0]  # Goal point 'G'
     
@@ -83,27 +102,62 @@ def level_2(visualizer, file_path):
     # Make the screen stay alive
     # level2_finder.visualizer.root.mainloop()
 
+def level_4(visualizer, file_path):
+    for ele in visualizer.root.winfo_children():
+        if not isinstance(ele, tk.Canvas):
+            ele.destroy()
+    visualizer.canvas.pack_forget()
+
+    def chose_file():
+        visualizer.canvas.pack(fill='both', expand=True)
+        visualizer.root.unbind('<Return')
+        visualizer.root.bind("<Return>", lambda *args: level_4(visualizer, file_path))
+        drop.destroy()
+        button.destroy()
+        level_4_UI_implementation.level_4(visualizer, clicked.get())
+        print('File:', clicked.get())
+        
+    options = [ 
+        "input1_level4.txt", 
+        "input2_level4.txt", 
+        "input3_level4.txt", 
+        "input4_level4.txt",
+        "input5_level4.txt", 
+    ] 
+    clicked = tk.StringVar()
+    clicked.set("input1_level4.txt") 
+    drop = ttk.OptionMenu(visualizer.root , clicked , *options ) 
+    drop.pack()
+    button = ttk.Button(visualizer.root , text="Run this file for Level 4" , command=chose_file)
+    button.pack()
+    
+
 level_list = []
 level_index = 0
 if __name__ == "__main__":
     visualizer = Visualizer.Visualizer()
-    file_path = 'input2_level1.txt'
     
-    # level_1(visualizer, file_path)
-    level_list.append(lambda *args: level_1(visualizer, file_path))
-    level_list.append(lambda *args: level_2(visualizer, file_path))
+    level_list.append(lambda *args: level_1(visualizer, 'input5_level1.txt'))
+    level_list.append(lambda *args: level_2(visualizer, 'input5_level2.txt'))
+    level_list.append(lambda *args: level_3_ui_implementation.level_3(visualizer, 'input5_level3.txt'))
+    level_list.append(lambda *args: level_4(visualizer, 'input1_level4.txt'))
     
-    def change_level(new_level = 0):
+    def change_level(new_level = None):
         global level_index
-        level_index = max(min(new_level, len(level_list) - 1), 0)
+        if new_level is not None:
+            level_index = max(min(new_level, len(level_list) - 1), 0)
         print(level_index)
         foo = level_list[level_index]
         visualizer.canvas.delete('all')
         foo()
         
     visualizer.canvas.create_text(10, 12, text='Using number key 1, 2, 3, 4 to change level', font=('Cascadia Code', 14), anchor='nw')
+    img= ImageTk.PhotoImage(Image.open("images/welcome.png").resize((1100, 680)))
+    visualizer.canvas.create_image(0, 30, image=img, anchor='nw')
         
     visualizer.root.bind("<Key-1>", lambda *args: change_level(0))
     visualizer.root.bind("<Key-2>", lambda *args: change_level(1))
     visualizer.root.bind("<Key-3>", lambda *args: change_level(2))
+    visualizer.root.bind("<Key-4>", lambda *args: change_level(3))
+    
     visualizer.root.mainloop()
