@@ -3,6 +3,10 @@ This repository contains our code for the group homework of the class Introducti
 
 The inputs, path search algorithms, the main UI code along with class diagrams of some of our custom classes are included.
 
+# Demo video
+[![Video](https://img.youtube.com/vi/o3kB2hNbsmE/maxresdefault.jpg)](https://youtu.be/o3kB2hNbsmE)
+
+
 # Running the UI
 All of our code are written in Python so a system with a relatively modern version of Python (>= 3.10) and PIP are required to run the program.
 
