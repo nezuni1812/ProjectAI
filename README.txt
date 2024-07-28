@@ -14,7 +14,11 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
-A Tkinter window will pop up and show the levels that the user can choose using the number keys. More information are available inside each level.
+A Tkinter window will pop up and show the welcome screen, noticing the user that they can choose which level to run using the number keys. More information are available inside each level.
+
+When a level is has completed, the user can switch to another level by pressing the number key corresponding to the level index, i.e. `1`, `2`, `3` or `4`.
+
+To restart a level, the user can press the `enter` key.
 
 # Changing level's inputs
 Each level has 5 test cases, or inputs. Their file names are: 

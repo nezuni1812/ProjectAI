@@ -5,8 +5,8 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 
-import testingLvl3
-import testingLvl4
+import level_3_ui_implementation
+import level_4_UI_implementation
 
 index = 0
 
@@ -114,7 +114,7 @@ def level_4(visualizer, file_path):
         visualizer.root.bind("<Return>", lambda *args: level_4(visualizer, file_path))
         drop.destroy()
         button.destroy()
-        testingLvl4.level_4(visualizer, clicked.get())
+        level_4_UI_implementation.level_4(visualizer, clicked.get())
         print('File:', clicked.get())
         
     options = [ 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     
     level_list.append(lambda *args: level_1(visualizer, 'input5_level1.txt'))
     level_list.append(lambda *args: level_2(visualizer, 'input5_level2.txt'))
-    level_list.append(lambda *args: testingLvl3.level_3(visualizer, 'input5_level3.txt'))
+    level_list.append(lambda *args: level_3_ui_implementation.level_3(visualizer, 'input5_level3.txt'))
     level_list.append(lambda *args: level_4(visualizer, 'input1_level4.txt'))
     
     def change_level(new_level = None):
