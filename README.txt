@@ -33,9 +33,16 @@ Each level has 5 test cases, or inputs. Their file names are:
 ```python
 level_list.append(lambda *args: level_1(visualizer, 'input5_level1.txt'))
 level_list.append(lambda *args: level_2(visualizer, 'input5_level2.txt'))
-level_list.append(lambda *args: testingLvl3.level_3(visualizer, 'input5_level3.txt'))
+level_list.append(lambda *args: level_3_UI_implementation.level_3(visualizer, 'input5_level3.txt'))
 ```
 User can directly edit the input file name in the `main.py` file by their level. For level 1, all the path searching implementations will use the same input maze.
 
 ## Level 4
 For level 4, user can change the input by clicking the dropdown and choosing which file to take data from.
+
+# Class diagram
+The `PathFinder.py` and `Visualizer.py` contains our classes for the project.
+
+Each path search algorithm in level 1 and 2 are implemented using an abstract base class with common methods like `get_neighbors`, `reconstruct_path`, `heuristic`..., custom Priority Queue data structure and a pure virtual function `find_path` that is implemented by its sub classes.
+
+The UML diagram are written in Markdown file with Mermaid code, which can be previewed on [Mermaid Live editor](https://mermaid.live/) or using a VSCode extension like [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid).
