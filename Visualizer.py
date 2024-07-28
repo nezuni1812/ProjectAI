@@ -46,6 +46,7 @@ class Visualizer:
         self.make_boxes()
         self.canvas.pack()
         self.images = []
+        self.agents = {}
 
         pass
     
@@ -67,6 +68,7 @@ class Visualizer:
             self.images.append(ImageTk.PhotoImage(image))
             transparent_image = self.canvas.create_image(x1, y1, image=self.images[-1], anchor='nw')
         if transparent_image is not None:
+            return (self.canvas.create_rectangle(x1, y1, x2, y2, **kwargs), transparent_image)
             return transparent_image
         return self.canvas.create_rectangle(x1, y1, x2, y2, **kwargs)
     
@@ -114,6 +116,8 @@ class Visualizer:
         self.root.bind("<space>", lambda *args: self.toggle_autoplay())
         self.root.bind("<Right>", lambda *args: self.next())
         
+        self.agents.clear()
+        
         for step in path:
             # Position for current node
             j, i = step[2]
@@ -132,33 +136,53 @@ class Visualizer:
             self.canvas.itemconfigure(txt, text = f"Turn: {step[0]} - {step[3]}\n\
 From {step[1][0], step[1][1]} to {step[2][0], step[2][1]}")
 
-            if 'newgoal' in step[3]:
-                curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.6)
+            curren_box = None
+            if step[0] not in self.agents:
+                if 'newgoal' in step[3]:
+                    curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=1)
+                else:
+                    curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=1)
+                self.agents[step[0]] = curren_box
             else:
-                curren_box = self.create_transparent_rectangle(x0, y0, x1, y1, fill=colrs[step[0]], width=1, alpha=.65)
-            outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline='white', width=3)
+                curren_box = self.agents[step[0]]
+                self.canvas.moveto(curren_box[0], x0, y0)
+                self.canvas.moveto(curren_box[1], x0, y0)
+
+            outline = self.canvas.create_rectangle(before_x0, before_y0, before_x1, before_y1, outline=colrs[step[0]], width=3)
                 
             # Create text on current cell
             current_cell_txt = None
             if 'newgoal' in step[3]:
-                self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text='G' + step[0][1], font=('Cascadia Code', 14))
+                new_goal_cell = self.canvas.create_rectangle(x0, y0, x1, y1, fill=self.colors['G'])
+                self.canvas.tag_lower(new_goal_cell)
+                self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text='G' + step[0][1], font=('Cascadia Code', 12))
             else:
                 if 'wait' in step[3]:
-                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '⌛', font=('Cascadia Code', 14))
+                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '⌛', font=('Cascadia Code', 12))
                 elif 'refuel' in step[3]:
-                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '⛽', font=('Cascadia Code', 14))
+                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0] + '⛽', font=('Cascadia Code', 12))
                 else:
-                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0], font=('Cascadia Code', 14))
+                    current_cell_txt = self.canvas.create_text(x0 + self.BOX_WIDTH/2, y0 + self.BOX_WIDTH/2, text=step[0], font=('Cascadia Code', 12))
+                self.canvas.tag_raise(curren_box[0])
+                self.canvas.tag_raise(curren_box[1])
+                self.canvas.tag_raise(current_cell_txt)
             
             # If the action is to create new goal, move the outline to the correct position immediately
             if 'newgoal' in step[3]:
                 self.canvas.move(outline, x0 - before_x0, y0 - before_y0)
             
             # Outline animation
+            self.canvas.moveto(curren_box[0], before_x0, before_y0)
+            self.canvas.moveto(curren_box[1], before_x0, before_y0)
+            # self.canvas.moveto(current_cell_txt, before_x0 + self.BOX_WIDTH/2 - 6, before_y0 + self.BOX_WIDTH/2 - 6)
+            # self.canvas.configure(current_cell_txt, x1=before_x0 + self.BOX_WIDTH/2, y1=before_y0 + self.BOX_WIDTH/2)
             while (self.canvas.coords(outline)[0] != x0 or self.canvas.coords(outline)[1] != y0):
                 x_amount = 1 if x0 > self.canvas.coords(outline)[0] else -1 if x0 < self.canvas.coords(outline)[0] else 0
                 y_amount = 1 if y0 > self.canvas.coords(outline)[1] else -1 if y0 < self.canvas.coords(outline)[1] else 0
                 self.canvas.move(outline, x_amount, y_amount)
+                self.canvas.move(curren_box[0], x_amount, y_amount)
+                self.canvas.move(curren_box[1], x_amount, y_amount)
+                # self.canvas.move(current_cell_txt, x_amount, y_amount)
                 self.canvas.after(1)
                 self.root.update()
             

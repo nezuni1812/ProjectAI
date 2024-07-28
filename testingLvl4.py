@@ -64,4 +64,4 @@ def level_4(visuals, file_path):
         
 if __name__ == '__main__':
     visuals = Visualizer.Visualizer()
-    level_4(visuals, 'input4_level4.txt')
+    level_4(visuals, 'input2_level4.txt')
